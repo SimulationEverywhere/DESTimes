@@ -1,0 +1,8 @@
+This repository contains two time classes to work in Discrete Event Simulation (DES).
+
+BRIValue: Boost Rational with Infinity Value - Is an extension of booost_rational<int> to allow using infinity.
+DNTime: Deep Natural Time - allows to work in the international standar time format hh:mm:ss:ms and it adds microseconds, nanoseconds, picoseconds and femtoseconds which are the mesurable units event if it exist smaller units that those.
+
+Dependencies:
+* c++11 >=
+* Boost Library 1.57 >=
