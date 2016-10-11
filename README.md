@@ -5,6 +5,7 @@ Dependencies:
  - [c++11]  >=
  - [gcc]
  - [Boost 1.57] >=
+
 ### BRIValue (Boost Rational with Infinity Value): 
 Is an extension of booost_rational<int> that allows using infinity.
 
