@@ -1,5 +1,5 @@
 # DESTimes Discrete Event Simulation Times
-This repository contains two time classes to work in Discrete Event Simulation (DES).
+This repository contains two time classes to work with in Discrete Event Simulation (DES).
 
 Dependencies:
  - [c++11]  >=
