@@ -7,7 +7,7 @@ Dependencies:
  - [Boost 1.57] >=
 
 ### BRIValue (Boost Rational with Infinity Value): 
-Is an extension of booost_rational<int> that allows using infinity.
+Is an extension of boost_rational\<int\> that allows using infinity.
 
 ### NDTime (Natural Deep Time):
 Allows to work with the international standar time format hh:mm:ss:mmss and it also allows to work with smaller time units as: 
