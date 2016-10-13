@@ -2,8 +2,8 @@ CC=g++
 CFLAGS=-std=c++11
 
 all:
-	$(CC) -g $(CFLAGS) constructors_test.cpp ../NDTime.hpp -o constructors_test
+	$(CC) -g $(CFLAGS) ndtime_test.cpp ../NDTime.hpp -o ndtime_test
 
 clean:
-	rm constructors_test
+	rm ndtime_test
 	rm -f test *.o *~

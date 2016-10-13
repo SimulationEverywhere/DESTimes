@@ -4,11 +4,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 #include <boost/algorithm/string.hpp>
 
 class NDTime {
 private:
   bool _inf;
+  bool _possitive;
   int _hours; // 3600 seconds
   int _minutes; // 60 seconds
   int _seconds; // 10^0 seconds
@@ -17,6 +19,108 @@ private:
   int _nanoseconds; // 10^9 seconds
   int _picoseconds; // 10^12 seconds
   int _femtoseconds; // 10^15 seconds
+
+  void add_hours(int a) {
+    this->_hours += a;
+  }
+
+  void add_minutes(int a) {
+    this->_minutes += a;
+
+    while (this->_minutes >= 60) {
+      this->add_hours(1);
+      this->_minutes -= 60;
+    }
+
+    while (this->_minutes <= -60) {
+      this->add_hours(-1);
+      this->_minutes += 60;
+    }
+  }
+
+  void add_seconds(int a) {
+    this->_seconds += a;
+
+    while (this->_seconds >= 60) {
+      this->add_minutes(1);
+      this->_seconds -= 60;
+    }
+
+    while (this->_seconds <= -60) {
+      this->add_minutes(-1);
+      this->_seconds += 60;
+    }
+  }
+
+  void add_milliseconds(int a) {
+    this->_milliseconds += a;
+
+    while (this->_milliseconds >= 1000) {
+      this->add_seconds(1);
+      this->_milliseconds -= 1000;
+    }
+
+    while (this->_milliseconds <= -1000) {
+      this->add_seconds(-1);
+      this->_milliseconds += 1000;
+    }
+  }
+
+  void add_microseconds(int a) {
+    this->_microseconds += a;
+
+    while (this->_microseconds >= 1000) {
+      this->add_milliseconds(1);
+      this->_microseconds -= 1000;
+    }
+
+    while (this->_microseconds <= -1000) {
+      this->add_milliseconds(-1);
+      this->_microseconds += 1000;
+    }
+  }
+
+  void add_nanoseconds(int a) {
+    this->_nanoseconds += a;
+
+    while (this->_nanoseconds >= 1000) {
+      this->add_microseconds(1);
+      this->_nanoseconds -= 1000;
+    }
+
+    while (this->_nanoseconds <= -1000) {
+      this->add_microseconds(-1);
+      this->_nanoseconds += 1000;
+    }
+  }
+
+  void add_picoseconds(int a) {
+    this->_picoseconds += a;
+
+    while (this->_picoseconds >= 1000) {
+      this->add_nanoseconds(1);
+      this->_picoseconds -= 1000;
+    }
+
+    while (this->_picoseconds <= -1000) {
+      this->add_nanoseconds(-1);
+      this->_picoseconds += 1000;
+    }
+  }
+
+  void add_femtoseconds(int a) {
+    this->_femtoseconds += a;
+
+    while (this->_femtoseconds >= 1000) {
+      this->add_picoseconds(1);
+      this->_femtoseconds -= 1000;
+    }
+
+    while (this->_femtoseconds <= -1000) {
+      this->add_picoseconds(-1);
+      this->_femtoseconds += 1000;
+    }
+  }
 
 public:
 
@@ -70,7 +174,11 @@ public:
     
     this->resetToZero();
     if (a == "inf") {
-      _inf = true;
+      this->_inf = true;
+      this->_possitive = true;
+    } else if (a == "-inf") {
+      this->_inf = true;
+      this->_possitive = false;
     } else {
       boost::split(strs,a,boost::is_any_of(":"));
       for(i=0; i<strs.size(); ++i) {
@@ -93,6 +201,10 @@ public:
     return NDTime("inf");
   }
 
+  static NDTime minus_infinity() noexcept {
+    return NDTime("-inf");
+  }
+
   void resetToZero() {
     this->_inf = false;
     this->_hours = 0;
@@ -106,130 +218,53 @@ public:
   }
 
   NDTime& operator+=(const NDTime& o) noexcept {
-    if (o._inf) this->_inf = true;
+    if (this->_inf && o._inf) {
+      if (this->_possitive != o._possitive) {
+        this->resetToZero();
+        this->_inf = false;
+      }
     
-    this->add_hours(o._hours);
-    this->add_minutes(o._minutes);
-    this->add_seconds(o._seconds);
-    this->add_milliseconds(o._milliseconds);
-    this->add_microseconds(o._microseconds);
-    this->add_nanoseconds(o._nanoseconds);
-    this->add_picoseconds(o._picoseconds);
-    this->add_femtoseconds(o._femtoseconds);
+    } else if (o._inf) {
+      this->_inf = true;
+      this->_possitive = o._possitive;
+    
+    } else {
+      this->add_hours(o._hours);
+      this->add_minutes(o._minutes);
+      this->add_seconds(o._seconds);
+      this->add_milliseconds(o._milliseconds);
+      this->add_microseconds(o._microseconds);
+      this->add_nanoseconds(o._nanoseconds);
+      this->add_picoseconds(o._picoseconds);
+      this->add_femtoseconds(o._femtoseconds);      
+    }
+
+    return *this;
   }
 
   NDTime& operator-=(const NDTime& o) noexcept {
+    if (this->_inf && o._inf) {
+      if (this->_possitive == o._possitive) {
+        this->resetToZero();
+        this->_inf = false;
+      }
     
-    this->add_hours(-o._hours);
-    this->add_minutes(-o._minutes);
-    this->add_seconds(-o._seconds);
-    this->add_milliseconds(-o._milliseconds);
-    this->add_microseconds(-o._microseconds);
-    this->add_nanoseconds(-o._nanoseconds);
-    this->add_picoseconds(-o._picoseconds);
-    this->add_femtoseconds(-o._femtoseconds);
-  }
-
-  void add_hours(int a) {
-    this->_hours += a;
-  }
-
-  void add_minutes(int a) {
-    this->_minutes += a;
-
-    while (this->_minutes >= 60) {
-      this->add_hours(1);
-      this->_minutes -= 60;
+    } else if (o._inf) {
+      this->_inf = true;
+      this->_possitive = !o._possitive;
+    
+    } else {
+      this->add_hours(-o._hours);
+      this->add_minutes(-o._minutes);
+      this->add_seconds(-o._seconds);
+      this->add_milliseconds(-o._milliseconds);
+      this->add_microseconds(-o._microseconds);
+      this->add_nanoseconds(-o._nanoseconds);
+      this->add_picoseconds(-o._picoseconds);
+      this->add_femtoseconds(-o._femtoseconds);
     }
 
-    if(this->_minutes <= -60) {
-      this->add_hours(-1);
-      this->_minutes += 60;
-    }
-  }
-
-  void add_seconds(int a) {
-    this->_seconds += a;
-
-    while (this->_seconds >= 60) {
-      this->add_minutes(1);
-      this->_seconds -= 60;
-    }
-
-    if(this->_seconds <= -60) {
-      this->add_minutes(-1);
-      this->_seconds += 60;
-    }
-  }
-
-  void add_milliseconds(int a) {
-    this->_milliseconds += a;
-
-    while (this->_milliseconds >= 1000) {
-      this->add_seconds(1);
-      this->_milliseconds -= 1000;
-    }
-
-    if(this->_milliseconds <= -1000) {
-      this->add_seconds(-1);
-      this->_milliseconds += 1000;
-    }
-  }
-
-  void add_microseconds(int a) {
-    this->_microseconds += a;
-
-    while (this->_microseconds >= 1000) {
-      this->add_milliseconds(1);
-      this->_microseconds -= 1000;
-    }
-
-    if(this->_microseconds <= -1000) {
-      this->add_milliseconds(-1);
-      this->_microseconds += 1000;
-    }
-  }
-
-  void add_nanoseconds(int a) {
-    this->_nanoseconds += a;
-
-    while (this->_nanoseconds >= 1000) {
-      this->add_microseconds(1);
-      this->_nanoseconds -= 1000;
-    }
-
-    if(this->_nanoseconds <= -1000) {
-      this->add_microseconds(-1);
-      this->_nanoseconds += 1000;
-    }
-  }
-
-  void add_picoseconds(int a) {
-    this->_picoseconds += a;
-
-    while (this->_picoseconds >= 1000) {
-      this->add_nanoseconds(1);
-      this->_picoseconds -= 1000;
-    }
-
-    if(this->_picoseconds <= -1000) {
-      this->add_nanoseconds(-1);
-      this->_picoseconds += 1000;
-    }
-  }
-
-  void add_femtoseconds(int a) {
-    this->_femtoseconds += a;
-
-    while (this->_femtoseconds >= 1000) {
-      this->add_picoseconds(1);
-      this->_femtoseconds -= 1000;
-    }
-
-    if(this->_femtoseconds <= -1000) {
-      this->add_picoseconds(-1);
-      this->_femtoseconds += 1000;
-    }
+    return *this;
   }
 
   friend NDTime operator+(const NDTime& lhs, const NDTime& rhs);
@@ -334,6 +369,44 @@ std::istream& operator>>(std::istream& is, NDTime t) {
   is >> a;
   t = NDTime(a);
   return is;
+}
+
+// specialize numeric_limits
+namespace std {
+  template<>
+  class numeric_limits<NDTime>{
+  public:
+    static constexpr bool is_specialized = true;
+    static NDTime min() noexcept { return NDTime(numeric_limits<int>::min(),-59,-59,-999,-999,-999,-999,-999); }
+    static NDTime max() noexcept { return NDTime(numeric_limits<int>::max(),59,59,999,999,999,999,999); }
+    static NDTime lowest() noexcept { return NDTime(numeric_limits<int>::min(),-59,-59,-999,-999,-999,-999,-999); }
+
+    static constexpr int  digits = numeric_limits<int>::digits;
+    static constexpr int  digits10 = numeric_limits<int>::digits10;
+    static constexpr bool is_signed = true;
+    static constexpr bool is_integer = false;
+    static constexpr bool is_exact = true;
+    static constexpr int radix = 2; // trash_value
+
+    static constexpr int  min_exponent = numeric_limits<int>::min(); // trash_value
+    static constexpr int  min_exponent10 = min_exponent/radix; // trash_value
+    static constexpr int  max_exponent = numeric_limits<int>::max(); // trash_value
+    static constexpr int  max_exponent10 = max_exponent/radix; // trash_value
+
+    static constexpr bool has_infinity = true;
+    static constexpr bool has_quiet_NaN = false;
+    static constexpr bool has_signaling_NaN = false;
+    static constexpr float_denorm_style has_denorm = denorm_indeterminate;
+    static constexpr bool has_denorm_loss = false;
+    static NDTime infinity() noexcept { return NDTime::infinity(); }
+
+    static constexpr bool is_iec559 = false;
+    static constexpr bool is_bounded = false;
+    static constexpr bool is_modulo = false;
+
+    static constexpr bool traps = false;
+    static constexpr bool tinyness_before = false;
+  };
 }
 
 #endif
