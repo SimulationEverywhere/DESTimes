@@ -130,11 +130,15 @@ public:
   /************** CONSTRUCTORS **************/
   /******************************************/
   NDTime() { // default constructor
+    this->_inf = false;
+    this->_possitive = false;
+
     this->resetToZero();
   };
 
   NDTime(const NDTime& o) { // copy constructor
     _inf = o._inf;
+    _possitive = o._possitive;
     _hours = o._hours;
     _minutes = o._minutes;
     _seconds = o._seconds;
@@ -146,6 +150,9 @@ public:
   };
 
   NDTime(int o_h, int o_m, int o_s, int o_ms) { // basic contructor
+    this->_inf = false;
+    this->_possitive = false;
+    
     this->resetToZero();
     
     this->add_hours(o_h);
@@ -155,6 +162,9 @@ public:
   };
 
   NDTime(int o_h, int o_m, int o_s, int o_ms, int o_mcs, int o_ns, int o_ps, int o_fs) { // advanced constructor
+    this->_inf = false;
+    this->_possitive = false;
+
     this->resetToZero();
     
     this->add_hours(o_h);
@@ -172,7 +182,11 @@ public:
     int v, i;
     std::vector<std::string> strs;
     
+    this->_inf = false;
+    this->_possitive = false;
+
     this->resetToZero();
+    
     if (a == "inf") {
       this->_inf = true;
       this->_possitive = true;
@@ -197,6 +211,14 @@ public:
     }
   };
 
+  static void startDeepView() {
+    NDTime::_deep_precision = true;
+  }
+
+  static void stopDeepView() {
+    NDTime::_deep_precision = false;
+  }
+
   static NDTime infinity() noexcept {
     return NDTime("inf");
   }
@@ -207,6 +229,7 @@ public:
 
   void resetToZero() {
     this->_inf = false;
+    this->_possitive = false;
     this->_hours = 0;
     this->_minutes = 0;
     this->_seconds = 0;
@@ -348,7 +371,11 @@ bool operator>=(const NDTime& lhs, const NDTime& rhs) {
 std::ostream& operator<<(std::ostream& os, NDTime t) {
 
   if (t._inf) {
-    os << "inf";
+    if (t._possitive) {
+      os << "inf";
+    } else {
+      os << "-inf";
+    }
   } else {
     os << t._hours << ":";
     os << t._minutes << ":";

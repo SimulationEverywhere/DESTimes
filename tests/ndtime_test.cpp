@@ -5,8 +5,10 @@
 #define BOOST_TEST_MODULE britime
 #include <boost/test/included/unit_test.hpp>
 
+
 BOOST_AUTO_TEST_SUITE( ndtime_constructors )
 
+  
   BOOST_AUTO_TEST_CASE( positive_time_constructions ) {
     
     NDTime a("10:51:0:0");
@@ -37,7 +39,7 @@ BOOST_AUTO_TEST_SUITE( ndtime_constructors )
     BOOST_CHECK_EQUAL(d,g); 
     BOOST_CHECK_EQUAL(e,f); 
     BOOST_CHECK_EQUAL(e,g); 
-    BOOST_CHECK_EQUAL(f,g);	
+    BOOST_CHECK_EQUAL(f,g); 
   }
 
   BOOST_AUTO_TEST_CASE( negative_time_constructions ) {
@@ -94,20 +96,28 @@ BOOST_AUTO_TEST_SUITE( ndtime_aritmetic_operations )
     NDTime f(10,0,0,0);
     NDTime g(-10,0,0,0);
 
+
     NDTime h("inf");
     NDTime i("-inf");
-
+  
+    // Testing to add a very small time to a very large time
     NDTime j(0,0,0,0,0,0,0,1);
     NDTime k(10,0,0,0,0,0,0,1);
 
     BOOST_CHECK_EQUAL(a+b,c);
+    BOOST_CHECK_EQUAL(a+(b+c),(a+b)+c);
+    BOOST_CHECK_EQUAL(a+b+c,a+c+b);
+    BOOST_CHECK_EQUAL(a+b+c,a+c+b);
     BOOST_CHECK_EQUAL(a+d,e);
     BOOST_CHECK_EQUAL(a,c-b);
     BOOST_CHECK_EQUAL(f+g,NDTime());
     BOOST_CHECK_EQUAL(a+NDTime(),a);
     BOOST_CHECK_EQUAL(a+h,h);
     BOOST_CHECK_EQUAL(a+i,i);
+    BOOST_CHECK_EQUAL(i+i,i);
+    BOOST_CHECK_EQUAL(h+h,h);
     BOOST_CHECK_EQUAL(h+i,NDTime());
+    BOOST_CHECK_EQUAL(i+h,NDTime());
     BOOST_CHECK_EQUAL(f+j,k);
   }
 
