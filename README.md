@@ -29,7 +29,7 @@ This time units are the smaller mesurable units in phisics
 ```
 
 	1 Default constructor: Initialize a new NDTime with value zero as default.
-	2  Copy constructor: Initialize a new NDTime with the exact same value as the first parameter val.
+	2 Copy constructor: Initialize a new NDTime with the exact same value as the first parameter val.
 	3 Natural constructor: Initialize a new NDTime with value hours:minutes:seconds:milliseconds
 	4 Deep constructor: Initialize a new NDTime with deep value hours:minutes:seconds:milliseconds:microseconds:nanoseconds:picoseconds:femtoseconds
 	5 Parser constructor: Intializa a new NDTime parsing a string val. accepted strings are: {"inf","-inf","hh:mm:ss:mmss","hh:mm:ss:mmss:mcs:nnss:ppss:ffss"} the last format is the international standar time format extended until femtoseconds.
