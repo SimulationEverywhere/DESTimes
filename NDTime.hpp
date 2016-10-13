@@ -177,7 +177,7 @@ public:
     this->add_femtoseconds(o_fs);
   };
 
-  // valid options are "inf" and hh:mm:ss:mmss:nnss:...:ffss it is not necesary to specify all the units.
+  // valid options are "inf", "-inf" and hh:mm:ss:mmss:mcs:nnss:ppss:ffss, NOTE: it is not necesary to specify all the units.
   NDTime(const std::string a) { 
     int v, i;
     std::vector<std::string> strs;
