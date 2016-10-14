@@ -107,22 +107,57 @@ BOOST_AUTO_TEST_SUITE( ndtime_aritmetic_operations )
     BOOST_CHECK_EQUAL(a+b,c);
     BOOST_CHECK_EQUAL(a+(b+c),(a+b)+c);
     BOOST_CHECK_EQUAL(a+b+c,a+c+b);
-    BOOST_CHECK_EQUAL(a+b+c,a+c+b);
     BOOST_CHECK_EQUAL(a+d,e);
     BOOST_CHECK_EQUAL(a,c-b);
     BOOST_CHECK_EQUAL(f+g,NDTime());
     BOOST_CHECK_EQUAL(a+NDTime(),a);
-    BOOST_CHECK_EQUAL(a+h,h);
-    BOOST_CHECK_EQUAL(a+i,i);
-    BOOST_CHECK_EQUAL(i+i,i);
-    BOOST_CHECK_EQUAL(h+h,h);
+    BOOST_CHECK_EQUAL(a+h,NDTime("inf"));
+    BOOST_CHECK_EQUAL(a+i,NDTime("-inf"));
+    BOOST_CHECK_EQUAL(i+i,NDTime("-inf"));
+    BOOST_CHECK_EQUAL(h+h,NDTime("inf"));
     BOOST_CHECK_EQUAL(h+i,NDTime());
     BOOST_CHECK_EQUAL(i+h,NDTime());
     BOOST_CHECK_EQUAL(f+j,k);
   }
 
   BOOST_AUTO_TEST_CASE ( substractions ) {
+    NDTime a(0,0,3,100);
+    NDTime b(0,50,3,0);
+    NDTime c(0,-50,0,100);
 
+    NDTime d(0,-50,6,-910);
+    NDTime e(0,50,-2,10);
+
+    NDTime f(10,0,0,0);
+    NDTime g(10,0,0,0);
+
+    NDTime h("inf");
+    NDTime i("-inf");
+  
+    // Testing to add a very small time to a very large time
+    NDTime j(0,0,0,0,0,0,0,1);
+    NDTime k(10,0,0,0,0,0,0,-1);
+
+    BOOST_CHECK_EQUAL(a-b,c);
+    BOOST_CHECK_EQUAL(a-(b+c),b-(a-c));
+    BOOST_CHECK_EQUAL(a-(b+c),NDTime());
+    BOOST_CHECK_EQUAL(b-(a-c),NDTime());
+    BOOST_CHECK_EQUAL((a-b)-c,a-b-c);
+    BOOST_CHECK_EQUAL((a-b)-c,a-(b+c));
+    BOOST_CHECK_EQUAL(a-(b-c),a-b+c);
+    BOOST_CHECK_EQUAL(a-b-c,a-c-b);
+    BOOST_CHECK_EQUAL(a-d,e);
+    BOOST_CHECK_EQUAL(a,c+b);
+    BOOST_CHECK_EQUAL(f-g,NDTime());
+    BOOST_CHECK_EQUAL(f-f,NDTime());
+    BOOST_CHECK_EQUAL(a-NDTime(),a);
+    BOOST_CHECK_EQUAL(a-h,NDTime("-inf"));
+    BOOST_CHECK_EQUAL(a-i,NDTime("inf"));
+    BOOST_CHECK_EQUAL(i-i,NDTime());
+    BOOST_CHECK_EQUAL(h-h,NDTime());
+    BOOST_CHECK_EQUAL(h-i,NDTime("inf"));
+    BOOST_CHECK_EQUAL(i-h,NDTime("-inf"));
+    BOOST_CHECK_EQUAL(f-j,k);
   }
 
 BOOST_AUTO_TEST_SUITE_END()
