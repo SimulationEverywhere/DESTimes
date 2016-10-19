@@ -30,21 +30,20 @@ This time units are the smaller mesurable units in phisics
 1 - NDTime();
 2 - NDTime(const NDTime& val);
 3 - NDTime(int hours);
-3 - NDTime(int hours, int minutes);
-3 - NDTime(int hours, int minutes, int seconds);
-3 - NDTime(int hours, int minutes, int seconds, int milliseconds);
-4 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds);
-4 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds);
-4 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds, int picoseconds);
-4 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds, int picoseconds, int femtoseconds);
-5 - NDTime(const string val);
+4 - NDTime(int hours, int minutes);
+5 - NDTime(int hours, int minutes, int seconds);
+6 - NDTime(int hours, int minutes, int seconds, int milliseconds);
+7 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds);
+8 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds);
+9 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds, int picoseconds);
+10 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds, int picoseconds, int femtoseconds);
+11 - NDTime(const string val);
 ```
 
 	1 Default constructor: Initialize a new NDTime with value zero as default.
 	2 Copy constructor: Initialize a new NDTime with the exact same value as the first parameter val.
-	3 Natural constructor: Initialize a new NDTime with value hours:minutes:seconds:milliseconds
-	4 Deep constructor: Initialize a new NDTime with deep value hours:minutes:seconds:milliseconds:microseconds:nanoseconds:picoseconds:femtoseconds
-	5 Parser constructor: Intializa a new NDTime parsing a string val. accepted strings are: {"inf","-inf","hh:mm:ss:mmss","hh:mm:ss:mmss:mcs:nnss:ppss:ffss"} the last format is the international standar time format extended until femtoseconds.
+	3..10 - Natural constructor: Initialize a new NDTime with values from hours to hours:......:femtoseconds.
+	11 Parser constructor: Intializa a new NDTime parsing a string val. accepted strings are: {"inf","-inf","hh" to "hh:mm:ss:mmss:mcs:nnss:ppss:ffss"} the last format is the international standar time format extended until femtoseconds.
 
 ## Available operators
 
