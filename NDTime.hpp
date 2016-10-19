@@ -32,11 +32,11 @@ private:
   int _hours; // 3600 seconds
   int _minutes; // 60 seconds
   int _seconds; // 10^0 seconds
-  int _milliseconds; 	 // 10^3 seconds
-  int _microseconds; // 10^6 seconds
-  int _nanoseconds; // 10^9 seconds
-  int _picoseconds; // 10^12 seconds
-  int _femtoseconds; // 10^15 seconds
+  int _milliseconds; 	 // 10^-3 seconds
+  int _microseconds; // 10^-6 seconds
+  int _nanoseconds; // 10^-9 seconds
+  int _picoseconds; // 10^-12 seconds
+  int _femtoseconds; // 10^-15 seconds
 
   void add_hours(int a) {
     this->_hours += a;
