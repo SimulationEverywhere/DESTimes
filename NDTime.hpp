@@ -149,7 +149,37 @@ public:
     _femtoseconds = o._femtoseconds;
   };
 
-  NDTime(int o_h, int o_m, int o_s, int o_ms) { // basic contructor
+  NDTime(int o_h) { // basic contructor hh
+    this->_inf = false;
+    this->_possitive = false;
+    
+    this->resetToZero();
+    
+    this->add_hours(o_h);
+  };
+
+  NDTime(int o_h, int o_m) { // basic contructor hh,mm
+    this->_inf = false;
+    this->_possitive = false;
+    
+    this->resetToZero();
+    
+    this->add_hours(o_h);
+    this->add_minutes(o_m);
+  };
+
+  NDTime(int o_h, int o_m, int o_s) { // basic contructor hh,mm,ss
+    this->_inf = false;
+    this->_possitive = false;
+    
+    this->resetToZero();
+    
+    this->add_hours(o_h);
+    this->add_minutes(o_m);
+    this->add_seconds(o_s);
+  };
+
+  NDTime(int o_h, int o_m, int o_s, int o_ms) { // basic contructor hh,mm,ss,mmss,
     this->_inf = false;
     this->_possitive = false;
     
@@ -161,7 +191,49 @@ public:
     this->add_milliseconds(o_ms);
   };
 
-  NDTime(int o_h, int o_m, int o_s, int o_ms, int o_mcs, int o_ns, int o_ps, int o_fs) { // advanced constructor
+  NDTime(int o_h, int o_m, int o_s, int o_ms, int o_mcs) { // advanced constructor hh,mm,ss,mmss,mmccss
+    this->_inf = false;
+    this->_possitive = false;
+
+    this->resetToZero();
+    
+    this->add_hours(o_h);
+    this->add_minutes(o_m);
+    this->add_seconds(o_s);
+    this->add_milliseconds(o_ms);
+    this->add_microseconds(o_mcs);
+  };
+
+  NDTime(int o_h, int o_m, int o_s, int o_ms, int o_mcs, int o_ns) { // advanced constructor hh,mm,ss,mmss,mmccss, nnss
+    this->_inf = false;
+    this->_possitive = false;
+
+    this->resetToZero();
+    
+    this->add_hours(o_h);
+    this->add_minutes(o_m);
+    this->add_seconds(o_s);
+    this->add_milliseconds(o_ms);
+    this->add_microseconds(o_mcs);
+    this->add_nanoseconds(o_ns);
+  };
+
+  NDTime(int o_h, int o_m, int o_s, int o_ms, int o_mcs, int o_ns, int o_ps) { // advanced constructor hh,mm,ss,mmccss,nnss,ppss
+    this->_inf = false;
+    this->_possitive = false;
+
+    this->resetToZero();
+    
+    this->add_hours(o_h);
+    this->add_minutes(o_m);
+    this->add_seconds(o_s);
+    this->add_milliseconds(o_ms);
+    this->add_microseconds(o_mcs);
+    this->add_nanoseconds(o_ns);
+    this->add_picoseconds(o_ps);
+  };
+
+  NDTime(int o_h, int o_m, int o_s, int o_ms, int o_mcs, int o_ns, int o_ps, int o_fs) { // advanced constructor hh,mm,ss,mmccss,nnss,ppss,ffss
     this->_inf = false;
     this->_possitive = false;
 

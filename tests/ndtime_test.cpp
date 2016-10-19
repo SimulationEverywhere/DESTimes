@@ -1,6 +1,7 @@
 #include "../NDTime.hpp"
 #include <iostream>
 #include <string>
+#include <vector>
 
 #define BOOST_TEST_MODULE britime
 #include <boost/test/included/unit_test.hpp>
@@ -79,6 +80,49 @@ BOOST_AUTO_TEST_SUITE( ndtime_constructors )
     NDTime b = std::numeric_limits<NDTime>::infinity();
 
     BOOST_CHECK_EQUAL(a,b);
+  }
+
+  BOOST_AUTO_TEST_CASE( constructors_test ) {
+    
+    std::vector<NDTime> times;
+
+    NDTime a(10);
+    NDTime b(9,60);
+    NDTime c(9,59,60);
+    NDTime d(9,59,59,1000);
+    NDTime e(9,59,59,999,1000);
+    NDTime f(9,59,59,999,999,1000);
+    NDTime g(9,59,59,999,999,999,1000);
+    NDTime h(9,59,59,999,999,999,999,1000);
+    NDTime i(11,-59,-59,-999,-999,-999,-999,-1000);
+    NDTime j(11,-59,-59,-999,-999,-999,-1000);
+    NDTime k(11,-59,-59,-999,-999,-1000);
+    NDTime l(11,-59,-59,-999,-1000);
+    NDTime m(11,-59,-59,-1000);
+    NDTime n(11,-59,-60);
+    NDTime o(11,-60);
+
+    times.push_back(a);
+    times.push_back(b);
+    times.push_back(c);
+    times.push_back(d);
+    times.push_back(e);
+    times.push_back(f);
+    times.push_back(g);
+    times.push_back(h);
+    times.push_back(i);
+    times.push_back(j);
+    times.push_back(k);
+    times.push_back(l);
+    times.push_back(m);
+    times.push_back(n);
+    times.push_back(o);
+
+    for (int i = 0; i < times.size(); ++i) {
+      for(int j = i+1; j < times.size(); ++j) {
+        BOOST_CHECK_EQUAL(times[i],times[j]);
+      }
+    }
   }
 
 BOOST_AUTO_TEST_SUITE_END()
