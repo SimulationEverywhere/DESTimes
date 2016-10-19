@@ -33,10 +33,10 @@ This time units are the smaller mesurable units in phisics
 4 - NDTime(int hours, int minutes);
 5 - NDTime(int hours, int minutes, int seconds);
 6 - NDTime(int hours, int minutes, int seconds, int milliseconds);
-7 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds);
-8 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds);
-9 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds, int picoseconds);
-10 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds, int picoseconds, int femtoseconds);
+7 - NDTime(int hours, int minutes, int seconds, int milliseconds, int microseconds);
+8 - NDTime(int hours, int minutes, int seconds, int milliseconds, int microseconds, int nanoseconds);
+9 - NDTime(int hours, int minutes, int seconds, int milliseconds, int microseconds, int nanoseconds, int picoseconds);
+10 - NDTime(int hours, int minutes, int seconds, int milliseconds, int microseconds, int nanoseconds, int picoseconds, int femtoseconds);
 11 - NDTime(const string val);
 ```
 
