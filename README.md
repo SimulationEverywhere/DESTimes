@@ -23,7 +23,13 @@ This time units are the smaller mesurable units in phisics
 ```c++
 1 - NDTime();
 2 - NDTime(const NDTime& val);
+3 - NDTime(int hours);
+3 - NDTime(int hours, int minutes);
+3 - NDTime(int hours, int minutes, int seconds);
 3 - NDTime(int hours, int minutes, int seconds, int milliseconds);
+4 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds);
+4 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds);
+4 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds, int picoseconds);
 4 - NDTime(int hours, int minutes, int seconds, int milliseconds, ints microseconds, int nanoseconds, int picoseconds, int femtoseconds);
 5 - NDTime(const string val);
 ```
