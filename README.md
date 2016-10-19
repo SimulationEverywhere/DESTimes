@@ -1,7 +1,13 @@
 # DESTimes Discrete Event Simulation Times
 This repository contains two time classes to work with in Discrete Event Simulation (DES).
 
-Dependencies:
+### Licence
+This software is under the GNU - v3 licence:
+
+### author
+Laouen Mayal Louan Belloli
+
+### Dependencies:
  - [c++11]  >=
  - [gcc]
  - [Boost 1.57] >=
@@ -18,7 +24,7 @@ Allows to work with the international standar time format hh:mm:ss:mmss and it a
 
 This time units are the smaller mesurable units in phisics
 
-### Available constructors
+## Available constructors
 
 ```c++
 1 - NDTime();
@@ -40,7 +46,7 @@ This time units are the smaller mesurable units in phisics
 	4 Deep constructor: Initialize a new NDTime with deep value hours:minutes:seconds:milliseconds:microseconds:nanoseconds:picoseconds:femtoseconds
 	5 Parser constructor: Intializa a new NDTime parsing a string val. accepted strings are: {"inf","-inf","hh:mm:ss:mmss","hh:mm:ss:mmss:mcs:nnss:ppss:ffss"} the last format is the international standar time format extended until femtoseconds.
 
-### Available operators
+## Available operators
 
 | Operator | Left type    | Right type |
 |----------|--------------|------------|
@@ -57,7 +63,7 @@ This time units are the smaller mesurable units in phisics
 | <<       | std::ostream | NDTime     |
 | >>       | std::istream | NDTime     |
 
-### Available methods
+## Available methods
 
 ```c++
 void resetToZero();
@@ -65,7 +71,7 @@ void resetToZero();
 // Resets the NDTime object to zero (i.e. 00:00:00:000:000:000:000:000)
 ```
 
-#### static methods
+## static methods
 
 ```c++
 static void startDeepView();
@@ -109,12 +115,6 @@ static NDTime minus_infinity();
 
 returns a NDTime with value negative infinity
 ```
-
-### Licence
-This software is under the GNU - v3 licence:
-
-### author
-Laouen Mayal Louan Belloli
 
    [C++11]: <https://gcc.gnu.org/projects/cxx-status.html#cxx11>
    [gcc]: <https://gcc.gnu.org/>
