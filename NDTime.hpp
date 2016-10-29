@@ -140,9 +140,16 @@ private:
     }
   }
 
+  static bool deepView(bool togle) {
+    static bool deep_precision = false;
+    if (togle)
+      deep_precision = !deep_precision;
+    return deep_precision;
+  }
+
 public:
 
-  static bool _deep_precision;
+  static bool deep_precision;
 
   /******************************************/
   /************** CONSTRUCTORS **************/
@@ -302,11 +309,13 @@ public:
   };
 
   static void startDeepView() {
-    NDTime::_deep_precision = true;
+    if (!NDTime::deepView(false))
+      NDTime::deepView(true);
   }
 
   static void stopDeepView() {
-    NDTime::_deep_precision = false;
+    if (NDTime::deepView(false))
+      NDTime::deepView(true);
   }
 
   static NDTime infinity() noexcept {
@@ -380,85 +389,69 @@ public:
     return *this;
   }
 
-  friend NDTime operator+(const NDTime& lhs, const NDTime& rhs);
-  friend NDTime operator-(const NDTime& lhs, const NDTime& rhs);
-  friend bool operator==(const NDTime& lhs, const NDTime& rhs);
-  friend bool operator!=(const NDTime& lhs, const NDTime& rhs);
-  friend bool operator<(const NDTime& lhs, const NDTime& rhs);
-  friend bool operator>(const NDTime& lhs, const NDTime& rhs);
-  friend bool operator<=(const NDTime& lhs, const NDTime& rhs);
-  friend bool operator>=(const NDTime& lhs, const NDTime& rhs);
+  NDTime operator+(const NDTime& rhs) const {
+    NDTime res = *this;
+    res += rhs;
+    return res;
+  }
+
+  NDTime operator-(const NDTime& rhs) const {
+    NDTime res = *this;
+    res -= rhs;
+    return res;
+  }
+
+  bool operator==(const NDTime& rhs) const {
+    if (this->_inf && rhs._inf) return true;
+    else if (this->_inf || rhs._inf) return false;
+    else {
+      bool res = true;
+      res = res && (this->_hours == rhs._hours);
+      res = res && (this->_minutes == rhs._minutes);
+      res = res && (this->_seconds == rhs._seconds);
+      res = res && (this->_milliseconds == rhs._milliseconds);
+      res = res && (this->_microseconds == rhs._microseconds);
+      res = res && (this->_nanoseconds == rhs._nanoseconds);
+      res = res && (this->_femtoseconds == rhs._femtoseconds);
+      return res;
+    }
+  }
+
+  bool operator!=(const NDTime& rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator<(const NDTime& rhs) const {
+    if (*this == rhs) return false;
+    else if (*this == NDTime("inf") || rhs == NDTime("-inf")) return false;
+    else if (rhs == NDTime("inf") ||  *this == NDTime("-inf")) return true;
+    else if (this->_hours != rhs._hours) return this->_hours < rhs._hours;
+    else if (this->_minutes != rhs._minutes) return this->_minutes < rhs._minutes;
+    else if (this->_seconds != rhs._seconds) return this->_seconds < rhs._seconds;
+    else if (this->_milliseconds != rhs._milliseconds) return this->_milliseconds < rhs._milliseconds;
+    else if (this->_microseconds != rhs._microseconds) return this->_microseconds < rhs._microseconds;
+    else if (this->_nanoseconds != rhs._nanoseconds) return this->_nanoseconds < rhs._nanoseconds;
+    else if (this->_femtoseconds != rhs._femtoseconds) return this->_femtoseconds < rhs._femtoseconds;
+    else assert("NDTime operator < get to an invalid option, this could be a bug.");
+  }
+
+  bool operator>(const NDTime& rhs) const {
+    return !(*this < rhs || *this == rhs);
+  }
+
+  bool operator<=(const NDTime& rhs) const {
+    return !(*this > rhs);
+  }
+
+  bool operator>=(const NDTime& rhs) const {
+    return !(*this < rhs);
+  }
+
   friend std::ostream& operator<<(std::ostream& os, NDTime t);
   friend std::istream& operator>>(std::istream& is, NDTime t);
 };
 
-bool NDTime::_deep_precision = false;
-
-NDTime operator+(const NDTime& lhs, const NDTime& rhs) {
-  NDTime res = lhs;
-  res += rhs;
-  return res;
-}
-
-NDTime operator-(const NDTime& lhs, const NDTime& rhs) {
-  NDTime res = lhs;
-  res -= rhs;
-  return res;
-}
-
-bool operator==(const NDTime& lhs, const NDTime& rhs) {
-  if (lhs._inf && rhs._inf) return true;
-  else if (lhs._inf || rhs._inf) return false;
-  else {
-    bool res = true;
-    res = res && (lhs._hours == rhs._hours);
-    res = res && (lhs._minutes == rhs._minutes);
-    res = res && (lhs._seconds == rhs._seconds);
-    res = res && (lhs._milliseconds == rhs._milliseconds);
-    res = res && (lhs._microseconds == rhs._microseconds);
-    res = res && (lhs._nanoseconds == rhs._nanoseconds);
-    res = res && (lhs._femtoseconds == rhs._femtoseconds);
-    return res;
-  }
-}
-
-bool operator!=(const NDTime& lhs, const NDTime& rhs) {
-  return !(lhs == rhs);
-}
-
-bool operator<(const NDTime& lhs, const NDTime& rhs) {
-  if (lhs._inf && rhs._inf) return false;
-  else if (rhs._inf) return true;
-  else if (lhs._hours != rhs._hours) return lhs._hours < rhs._hours;
-  else if (lhs._minutes != rhs._minutes) return lhs._minutes < rhs._minutes;
-  else if (lhs._seconds != rhs._seconds) return lhs._seconds < rhs._seconds;
-  else if (lhs._milliseconds != rhs._milliseconds) return lhs._milliseconds < rhs._milliseconds;
-  else if (lhs._microseconds != rhs._microseconds) return lhs._microseconds < rhs._microseconds;
-  else if (lhs._nanoseconds != rhs._nanoseconds) return lhs._nanoseconds < rhs._nanoseconds;
-  else if (lhs._femtoseconds != rhs._femtoseconds) return lhs._femtoseconds < rhs._femtoseconds;
-}
-
-bool operator>(const NDTime& lhs, const NDTime& rhs) {
-  if (lhs._inf && rhs._inf) return false;
-  else if (lhs._inf) return true;
-  else if (lhs._hours != rhs._hours) return lhs._hours > rhs._hours;
-  else if (lhs._minutes != rhs._minutes) return lhs._minutes > rhs._minutes;
-  else if (lhs._seconds != rhs._seconds) return lhs._seconds > rhs._seconds;
-  else if (lhs._milliseconds != rhs._milliseconds) return lhs._milliseconds > rhs._milliseconds;
-  else if (lhs._microseconds != rhs._microseconds) return lhs._microseconds > rhs._microseconds;
-  else if (lhs._nanoseconds != rhs._nanoseconds) return lhs._nanoseconds > rhs._nanoseconds;
-  else if (lhs._femtoseconds != rhs._femtoseconds) return lhs._femtoseconds > rhs._femtoseconds;
-}
-
-bool operator<=(const NDTime& lhs, const NDTime& rhs) {
-  return !(lhs > rhs);
-}
-
-bool operator>=(const NDTime& lhs, const NDTime& rhs) {
-  return !(lhs < rhs);
-}
-
-std::ostream& operator<<(std::ostream& os, NDTime t) {
+inline std::ostream& operator<<(std::ostream& os, NDTime t) {
 
   if (t._inf) {
     if (t._possitive) {
@@ -471,17 +464,18 @@ std::ostream& operator<<(std::ostream& os, NDTime t) {
     os << t._minutes << ":";
     os << t._seconds << ":";
     os << t._milliseconds;
-    if (t._deep_precision) {
+    if (NDTime::deepView(false)) {
       os << ":";
       os << t._microseconds << ":";
       os << t._nanoseconds << ":";
+      os << t._picoseconds << ":";
       os << t._femtoseconds;
     }
   }
   return os;
 }
 
-std::istream& operator>>(std::istream& is, NDTime t) {
+inline std::istream& operator>>(std::istream& is, NDTime t) {
   std::string a;
   is >> a;
   t = NDTime(a);

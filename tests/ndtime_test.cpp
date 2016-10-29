@@ -18,6 +18,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
+#include <string>
 
 #define BOOST_TEST_MODULE britime
 #include <boost/test/included/unit_test.hpp>
@@ -224,8 +226,138 @@ BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE( comparators )
   
-  BOOST_AUTO_TEST_CASE( all ) {
+  BOOST_AUTO_TEST_CASE( all ) {}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE( deepView )
+  
+  BOOST_AUTO_TEST_CASE( deep_view_off ) {
     
+    NDTime a(10,5,10,105,10,105,10,10);
+    NDTime b(10,5,10,105,10,105,10);
+    NDTime c(10,5,10,105,10,105);
+    NDTime d(10,5,10,105,10);
+    NDTime e(10,5,10,105);
+    NDTime f(10,5,10);
+    NDTime g(10,5);
+    NDTime h(10);
+    std::string expected1 = "10:5:10:105";
+    std::string expected2 = "10:5:10:0";
+    std::string expected3 = "10:5:0:0";
+    std::string expected4 = "10:0:0:0";
+    
+    std::stringstream out;
+    out << a; BOOST_CHECK_EQUAL(out.str(),expected1); out.str(""); out.clear();
+    out << b; BOOST_CHECK_EQUAL(out.str(),expected1); out.str(""); out.clear();
+    out << c; BOOST_CHECK_EQUAL(out.str(),expected1); out.str(""); out.clear();
+    out << d; BOOST_CHECK_EQUAL(out.str(),expected1); out.str(""); out.clear();
+    out << e; BOOST_CHECK_EQUAL(out.str(),expected1); out.str(""); out.clear();
+    out << f; BOOST_CHECK_EQUAL(out.str(),expected2); out.str(""); out.clear();
+    out << g; BOOST_CHECK_EQUAL(out.str(),expected3); out.str(""); out.clear();
+    out << h; BOOST_CHECK_EQUAL(out.str(),expected4); out.str(""); out.clear();
+  }
+  
+  BOOST_AUTO_TEST_CASE( deep_view_on ) {
+
+    NDTime a(10,5,10,105,10,105,10,10);
+    NDTime b(10,5,10,105,10,105,10);
+    NDTime c(10,5,10,105,10,105);
+    NDTime d(10,5,10,105,10);
+    NDTime e(10,5,10,105);
+    NDTime f(10,5,10);
+    NDTime g(10,5);
+    NDTime h(10);
+    std::string expected_a = "10:5:10:105:10:105:10:10";
+    std::string expected_b = "10:5:10:105:10:105:10:0";
+    std::string expected_c = "10:5:10:105:10:105:0:0";
+    std::string expected_d = "10:5:10:105:10:0:0:0";
+    std::string expected_e = "10:5:10:105:0:0:0:0";
+    std::string expected_f = "10:5:10:0:0:0:0:0";
+    std::string expected_g = "10:5:0:0:0:0:0:0";
+    std::string expected_h = "10:0:0:0:0:0:0:0";
+
+    NDTime::startDeepView();
+    
+    std::stringstream out;
+    out << a; BOOST_CHECK_EQUAL(out.str(),expected_a); out.str(""); out.clear();
+    out << b; BOOST_CHECK_EQUAL(out.str(),expected_b); out.str(""); out.clear();
+    out << c; BOOST_CHECK_EQUAL(out.str(),expected_c); out.str(""); out.clear();
+    out << d; BOOST_CHECK_EQUAL(out.str(),expected_d); out.str(""); out.clear();
+    out << e; BOOST_CHECK_EQUAL(out.str(),expected_e); out.str(""); out.clear();
+    out << f; BOOST_CHECK_EQUAL(out.str(),expected_f); out.str(""); out.clear();
+    out << g; BOOST_CHECK_EQUAL(out.str(),expected_g); out.str(""); out.clear();
+    out << h; BOOST_CHECK_EQUAL(out.str(),expected_h); out.str(""); out.clear();
+  }
+
+
+  BOOST_AUTO_TEST_CASE( deep_view_toggle ) {
+    NDTime a(10,5,10,105,10,105,10,10);
+    NDTime b(10,5,10,105,10,105,10);
+    NDTime c(10,5,10,105,10,105);
+    NDTime d(10,5,10,105,10);
+    NDTime e(10,5,10,105);
+    NDTime f(10,5,10);
+    NDTime g(10,5);
+    NDTime h(10);
+
+    std::string dv_expected_a = "10:5:10:105:10:105:10:10";
+    std::string dv_expected_b = "10:5:10:105:10:105:10:0";
+    std::string dv_expected_c = "10:5:10:105:10:105:0:0";
+    std::string dv_expected_d = "10:5:10:105:10:0:0:0";
+    std::string dv_expected_e = "10:5:10:105:0:0:0:0";
+    std::string dv_expected_f = "10:5:10:0:0:0:0:0";
+    std::string dv_expected_g = "10:5:0:0:0:0:0:0";
+    std::string dv_expected_h = "10:0:0:0:0:0:0:0";
+    std::string sv_expected_a = "10:5:10:105";
+    std::string sv_expected_b = "10:5:10:105";
+    std::string sv_expected_c = "10:5:10:105";
+    std::string sv_expected_d = "10:5:10:105";
+    std::string sv_expected_e = "10:5:10:105";
+    std::string sv_expected_f = "10:5:10:0";
+    std::string sv_expected_g = "10:5:0:0";
+    std::string sv_expected_h = "10:0:0:0";
+
+    std::stringstream out;
+    NDTime::startDeepView();
+    out << a; BOOST_CHECK_EQUAL(out.str(),dv_expected_a); out.str(""); out.clear();
+    NDTime::stopDeepView();
+    out << a; BOOST_CHECK_EQUAL(out.str(),sv_expected_a); out.str(""); out.clear();
+
+    NDTime::startDeepView();
+    out << b; BOOST_CHECK_EQUAL(out.str(),dv_expected_b); out.str(""); out.clear();
+    NDTime::stopDeepView();
+    out << b; BOOST_CHECK_EQUAL(out.str(),sv_expected_b); out.str(""); out.clear();
+
+    NDTime::startDeepView();
+    out << c; BOOST_CHECK_EQUAL(out.str(),dv_expected_c); out.str(""); out.clear();
+    NDTime::stopDeepView();
+    out << c; BOOST_CHECK_EQUAL(out.str(),sv_expected_c); out.str(""); out.clear();
+
+    NDTime::startDeepView();
+    out << d; BOOST_CHECK_EQUAL(out.str(),dv_expected_d); out.str(""); out.clear();
+    NDTime::stopDeepView();
+    out << d; BOOST_CHECK_EQUAL(out.str(),sv_expected_d); out.str(""); out.clear();
+
+    NDTime::startDeepView();
+    out << e; BOOST_CHECK_EQUAL(out.str(),dv_expected_e); out.str(""); out.clear();
+    NDTime::stopDeepView();
+    out << e; BOOST_CHECK_EQUAL(out.str(),sv_expected_e); out.str(""); out.clear();
+
+    NDTime::startDeepView();
+    out << f; BOOST_CHECK_EQUAL(out.str(),dv_expected_f); out.str(""); out.clear();
+    NDTime::stopDeepView();
+    out << f; BOOST_CHECK_EQUAL(out.str(),sv_expected_f); out.str(""); out.clear();
+
+    NDTime::startDeepView();
+    out << g; BOOST_CHECK_EQUAL(out.str(),dv_expected_g); out.str(""); out.clear();
+    NDTime::stopDeepView();
+    out << g; BOOST_CHECK_EQUAL(out.str(),sv_expected_g); out.str(""); out.clear();
+
+    NDTime::startDeepView();
+    out << h; BOOST_CHECK_EQUAL(out.str(),dv_expected_h); out.str(""); out.clear();
+    NDTime::stopDeepView();
+    out << h; BOOST_CHECK_EQUAL(out.str(),sv_expected_h); out.str(""); out.clear();
   }
 
 BOOST_AUTO_TEST_SUITE_END()
