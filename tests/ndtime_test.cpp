@@ -96,8 +96,14 @@ BOOST_AUTO_TEST_SUITE( ndtime_constructors )
   BOOST_AUTO_TEST_CASE( infinity_time_constructions ) {
     NDTime a("inf");
     NDTime b = std::numeric_limits<NDTime>::infinity();
+    NDTime c("-inf");
+    NDTime d("-infinity");
+    NDTime e("infinity");
 
     BOOST_CHECK_EQUAL(a,b);
+    BOOST_CHECK_EQUAL(a,e);
+    BOOST_CHECK_EQUAL(b,e);
+    BOOST_CHECK_EQUAL(c,d);
   }
 
   BOOST_AUTO_TEST_CASE( constructors_test ) {
@@ -226,7 +232,48 @@ BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE( comparators )
   
-  BOOST_AUTO_TEST_CASE( all ) {}
+  BOOST_AUTO_TEST_CASE( less ) {
+
+    NDTime minusInf("-inf");
+    NDTime inf("inf");
+    NDTime a(10);
+    NDTime b(0);
+    NDTime c(-10,55);
+    NDTime d(-10);
+    NDTime e(-10,-55);
+
+    BOOST_CHECK(minusInf < inf);
+    BOOST_CHECK(minusInf < a);
+    BOOST_CHECK(minusInf < b);
+    BOOST_CHECK(minusInf < c);
+    BOOST_CHECK(minusInf < d);
+    BOOST_CHECK(minusInf < e);
+    
+    BOOST_CHECK(b < a);
+    BOOST_CHECK(c < a);
+    BOOST_CHECK(d < a);
+    BOOST_CHECK(e < a);
+    BOOST_CHECK(c < b);
+    BOOST_CHECK(d < b);
+    BOOST_CHECK(e < b);
+    BOOST_CHECK(d < c);
+    BOOST_CHECK(e < c);
+    BOOST_CHECK(e < d);
+
+    BOOST_CHECK(a < inf);
+    BOOST_CHECK(b < inf);
+    BOOST_CHECK(c < inf);
+    BOOST_CHECK(d < inf);
+    BOOST_CHECK(e < inf);
+
+    BOOST_CHECK(!(minusInf < minusInf));
+    BOOST_CHECK(!(inf < inf));
+    BOOST_CHECK(!(a < a));
+    BOOST_CHECK(!(b < b));
+    BOOST_CHECK(!(c < c));
+    BOOST_CHECK(!(d < d));
+    BOOST_CHECK(!(e < e));
+  }
 
 BOOST_AUTO_TEST_SUITE_END()
 
@@ -242,10 +289,10 @@ BOOST_AUTO_TEST_SUITE( deepView )
     NDTime f(10,5,10);
     NDTime g(10,5);
     NDTime h(10);
-    std::string expected1 = "10:5:10:105";
-    std::string expected2 = "10:5:10:0";
-    std::string expected3 = "10:5:0:0";
-    std::string expected4 = "10:0:0:0";
+    std::string expected1 = "10:05:10:105";
+    std::string expected2 = "10:05:10:000";
+    std::string expected3 = "10:05:00:000";
+    std::string expected4 = "10:00:00:000";
     
     std::stringstream out;
     out << a; BOOST_CHECK_EQUAL(out.str(),expected1); out.str(""); out.clear();
@@ -268,14 +315,14 @@ BOOST_AUTO_TEST_SUITE( deepView )
     NDTime f(10,5,10);
     NDTime g(10,5);
     NDTime h(10);
-    std::string expected_a = "10:5:10:105:10:105:10:10";
-    std::string expected_b = "10:5:10:105:10:105:10:0";
-    std::string expected_c = "10:5:10:105:10:105:0:0";
-    std::string expected_d = "10:5:10:105:10:0:0:0";
-    std::string expected_e = "10:5:10:105:0:0:0:0";
-    std::string expected_f = "10:5:10:0:0:0:0:0";
-    std::string expected_g = "10:5:0:0:0:0:0:0";
-    std::string expected_h = "10:0:0:0:0:0:0:0";
+    std::string expected_a = "10:05:10:105:010:105:010:010";
+    std::string expected_b = "10:05:10:105:010:105:010:000";
+    std::string expected_c = "10:05:10:105:010:105:000:000";
+    std::string expected_d = "10:05:10:105:010:000:000:000";
+    std::string expected_e = "10:05:10:105:000:000:000:000";
+    std::string expected_f = "10:05:10:000:000:000:000:000";
+    std::string expected_g = "10:05:00:000:000:000:000:000";
+    std::string expected_h = "10:00:00:000:000:000:000:000";
 
     NDTime::startDeepView();
     
@@ -301,22 +348,22 @@ BOOST_AUTO_TEST_SUITE( deepView )
     NDTime g(10,5);
     NDTime h(10);
 
-    std::string dv_expected_a = "10:5:10:105:10:105:10:10";
-    std::string dv_expected_b = "10:5:10:105:10:105:10:0";
-    std::string dv_expected_c = "10:5:10:105:10:105:0:0";
-    std::string dv_expected_d = "10:5:10:105:10:0:0:0";
-    std::string dv_expected_e = "10:5:10:105:0:0:0:0";
-    std::string dv_expected_f = "10:5:10:0:0:0:0:0";
-    std::string dv_expected_g = "10:5:0:0:0:0:0:0";
-    std::string dv_expected_h = "10:0:0:0:0:0:0:0";
-    std::string sv_expected_a = "10:5:10:105";
-    std::string sv_expected_b = "10:5:10:105";
-    std::string sv_expected_c = "10:5:10:105";
-    std::string sv_expected_d = "10:5:10:105";
-    std::string sv_expected_e = "10:5:10:105";
-    std::string sv_expected_f = "10:5:10:0";
-    std::string sv_expected_g = "10:5:0:0";
-    std::string sv_expected_h = "10:0:0:0";
+    std::string dv_expected_a = "10:05:10:105:010:105:010:010";
+    std::string dv_expected_b = "10:05:10:105:010:105:010:000";
+    std::string dv_expected_c = "10:05:10:105:010:105:000:000";
+    std::string dv_expected_d = "10:05:10:105:010:000:000:000";
+    std::string dv_expected_e = "10:05:10:105:000:000:000:000";
+    std::string dv_expected_f = "10:05:10:000:000:000:000:000";
+    std::string dv_expected_g = "10:05:00:000:000:000:000:000";
+    std::string dv_expected_h = "10:00:00:000:000:000:000:000";
+    std::string sv_expected_a = "10:05:10:105";
+    std::string sv_expected_b = "10:05:10:105";
+    std::string sv_expected_c = "10:05:10:105";
+    std::string sv_expected_d = "10:05:10:105";
+    std::string sv_expected_e = "10:05:10:105";
+    std::string sv_expected_f = "10:05:10:000";
+    std::string sv_expected_g = "10:05:00:000";
+    std::string sv_expected_h = "10:00:00:000";
 
     std::stringstream out;
     NDTime::startDeepView();

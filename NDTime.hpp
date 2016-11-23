@@ -284,10 +284,10 @@ public:
 
     this->resetToZero();
     
-    if (a == "inf") {
+    if (a == "inf" || a == "infinity") {
       this->_inf = true;
       this->_possitive = true;
-    } else if (a == "-inf") {
+    } else if (a == "-inf" || a == "-infinity") {
       this->_inf = true;
       this->_possitive = false;
     } else {
@@ -402,7 +402,7 @@ public:
   }
 
   bool operator==(const NDTime& rhs) const {
-    if (this->_inf && rhs._inf) return true;
+    if (this->_inf && rhs._inf) return this->_possitive == rhs._possitive;
     else if (this->_inf || rhs._inf) return false;
     else {
       bool res = true;
@@ -460,16 +460,16 @@ inline std::ostream& operator<<(std::ostream& os, NDTime t) {
       os << "-inf";
     }
   } else {
-    os << t._hours << ":";
-    os << t._minutes << ":";
-    os << t._seconds << ":";
-    os << t._milliseconds;
+    os << ((t._hours < 10) ? "0":"") << t._hours << ":";
+    os << ((t._minutes < 10) ? "0":"") << t._minutes << ":";
+    os << ((t._seconds < 10) ? "0":"") << t._seconds << ":";
+    os << ((t._milliseconds < 10) ? "0":"") << ((t._milliseconds < 100) ? "0":"") << t._milliseconds;
     if (NDTime::deepView(false)) {
       os << ":";
-      os << t._microseconds << ":";
-      os << t._nanoseconds << ":";
-      os << t._picoseconds << ":";
-      os << t._femtoseconds;
+      os << ((t._microseconds < 10) ? "0":"") << ((t._microseconds < 100) ? "0":"") << t._microseconds << ":";
+      os << ((t._nanoseconds < 10) ? "0":"") << ((t._nanoseconds < 100) ? "0":"") << t._nanoseconds << ":";
+      os << ((t._picoseconds < 10) ? "0":"") << ((t._picoseconds < 100) ? "0":"") << t._picoseconds << ":";
+      os << ((t._femtoseconds < 10) ? "0":"") << ((t._femtoseconds < 100) ? "0":"") << t._femtoseconds;
     }
   }
   return os;
