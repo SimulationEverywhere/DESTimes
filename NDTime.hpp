@@ -447,11 +447,11 @@ public:
     return !(*this < rhs);
   }
 
-  friend std::ostream& operator<<(std::ostream& os, NDTime t);
-  friend std::istream& operator>>(std::istream& is, NDTime t);
+  friend std::ostream& operator<<(std::ostream& os, const NDTime& t);
+  friend std::istream& operator>>(std::istream& is, NDTime& t);
 };
 
-inline std::ostream& operator<<(std::ostream& os, NDTime t) {
+inline std::ostream& operator<<(std::ostream& os, const NDTime& t) {
 
   if (t._inf) {
     if (t._possitive) {
@@ -475,7 +475,7 @@ inline std::ostream& operator<<(std::ostream& os, NDTime t) {
   return os;
 }
 
-inline std::istream& operator>>(std::istream& is, NDTime t) {
+inline std::istream& operator>>(std::istream& is, NDTime& t) {
   std::string a;
   is >> a;
   t = NDTime(a);
