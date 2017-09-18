@@ -50,7 +50,7 @@ private:
       this->_minutes -= 60;
     }
 
-    while (this->_minutes <= -60) {
+    while (this->_minutes < 0) {
       this->add_hours(-1);
       this->_minutes += 60;
     }
@@ -64,7 +64,7 @@ private:
       this->_seconds -= 60;
     }
 
-    while (this->_seconds <= -60) {
+    while (this->_seconds < 0) {
       this->add_minutes(-1);
       this->_seconds += 60;
     }
@@ -78,7 +78,7 @@ private:
       this->_milliseconds -= 1000;
     }
 
-    while (this->_milliseconds <= -1000) {
+    while (this->_milliseconds < 0) {
       this->add_seconds(-1);
       this->_milliseconds += 1000;
     }
@@ -92,7 +92,7 @@ private:
       this->_microseconds -= 1000;
     }
 
-    while (this->_microseconds <= -1000) {
+    while (this->_microseconds < 0) {
       this->add_milliseconds(-1);
       this->_microseconds += 1000;
     }
@@ -106,7 +106,7 @@ private:
       this->_nanoseconds -= 1000;
     }
 
-    while (this->_nanoseconds <= -1000) {
+    while (this->_nanoseconds < 0) {
       this->add_microseconds(-1);
       this->_nanoseconds += 1000;
     }
@@ -120,7 +120,7 @@ private:
       this->_picoseconds -= 1000;
     }
 
-    while (this->_picoseconds <= -1000) {
+    while (this->_picoseconds < 0) {
       this->add_nanoseconds(-1);
       this->_picoseconds += 1000;
     }
@@ -134,7 +134,7 @@ private:
       this->_femtoseconds -= 1000;
     }
 
-    while (this->_femtoseconds <= -1000) {
+    while (this->_femtoseconds < 0) {
       this->add_picoseconds(-1);
       this->_femtoseconds += 1000;
     }

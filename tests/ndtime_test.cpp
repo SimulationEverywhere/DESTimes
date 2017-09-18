@@ -172,6 +172,10 @@ BOOST_AUTO_TEST_SUITE( ndtime_aritmetic_operations )
     NDTime j(0,0,0,0,0,0,0,1);
     NDTime k(10,0,0,0,0,0,0,1);
 
+    // Testing substraction win different units
+    NDTime l(1);
+    NDTime m(0,30);
+
     BOOST_CHECK_EQUAL(a+b,c);
     BOOST_CHECK_EQUAL(a+(b+c),(a+b)+c);
     BOOST_CHECK_EQUAL(a+b+c,a+c+b);
@@ -186,6 +190,7 @@ BOOST_AUTO_TEST_SUITE( ndtime_aritmetic_operations )
     BOOST_CHECK_EQUAL(h+i,NDTime());
     BOOST_CHECK_EQUAL(i+h,NDTime());
     BOOST_CHECK_EQUAL(f+j,k);
+    BOOST_CHECK_EQUAL(l-m, NDTime(0,30));
   }
 
   BOOST_AUTO_TEST_CASE ( substractions ) {
