@@ -286,6 +286,10 @@ public:
         return NDTime("-inf");
     }
 
+    static NDTime zero() noexcept {
+        return NDTime({0});
+    }
+
     void resetToZero() {
         this->_inf = false;
         this->_possitive = true;
@@ -517,7 +521,7 @@ namespace std {
         static constexpr bool is_specialized = true;
         static NDTime min() noexcept { return NDTime({numeric_limits<int>::min(),59,59,999,999,999,999,999}); }
         static NDTime max() noexcept { return NDTime({numeric_limits<int>::max(),59,59,999,999,999,999,999}); }
-        static NDTime lowest() noexcept { return NDTime({numeric_limits<int>::min(),-59,-59,-999,-999,-999,-999,-999}); }
+        static NDTime lowest() noexcept { return NDTime({numeric_limits<int>::min(),59,59,999,999,999,999,999}); }
 
         static constexpr int  digits = numeric_limits<int>::digits;
         static constexpr int  digits10 = numeric_limits<int>::digits10;

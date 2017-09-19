@@ -38,8 +38,13 @@ BOOST_AUTO_TEST_SUITE( ndtime_constructors )
 
         BOOST_CHECK_EQUAL(a,b);
         BOOST_CHECK_EQUAL(a,e);
+        BOOST_CHECK_EQUAL(a,NDTime::infinity());
+        BOOST_CHECK_EQUAL(b,NDTime::infinity());
+        BOOST_CHECK_EQUAL(e,NDTime::infinity());
         BOOST_CHECK_EQUAL(b,e);
         BOOST_CHECK_EQUAL(c,d);
+        BOOST_CHECK_EQUAL(c,NDTime::minus_infinity());
+        BOOST_CHECK_EQUAL(d,NDTime::minus_infinity());
     }
 
 BOOST_AUTO_TEST_SUITE_END()
@@ -86,14 +91,14 @@ BOOST_AUTO_TEST_SUITE( ndtime_aritmetic_operations )
         BOOST_CHECK_EQUAL(a+b+c,a+c+b);
         BOOST_CHECK_EQUAL(a+d,e);
         BOOST_CHECK_EQUAL(a,c-b);
-        BOOST_CHECK_EQUAL(f+g,NDTime());
-        BOOST_CHECK_EQUAL(a+NDTime(),a);
-        BOOST_CHECK_EQUAL(a+h,NDTime("inf"));
-        BOOST_CHECK_EQUAL(a+i,NDTime("-inf"));
-        BOOST_CHECK_EQUAL(i+i,NDTime("-inf"));
-        BOOST_CHECK_EQUAL(h+h,NDTime("inf"));
-        BOOST_CHECK_EQUAL(h+i,NDTime());
-        BOOST_CHECK_EQUAL(i+h,NDTime());
+        BOOST_CHECK_EQUAL(f+g,NDTime::zero());
+        BOOST_CHECK_EQUAL(a+NDTime::zero(),a);
+        BOOST_CHECK_EQUAL(a+h,NDTime::infinity());
+        BOOST_CHECK_EQUAL(a+i,NDTime::minus_infinity());
+        BOOST_CHECK_EQUAL(i+i,NDTime::minus_infinity());
+        BOOST_CHECK_EQUAL(h+h,NDTime::infinity());
+        BOOST_CHECK_EQUAL(h+i,NDTime::zero());
+        BOOST_CHECK_EQUAL(i+h,NDTime::zero());
         BOOST_CHECK_EQUAL(f+j,k);
         BOOST_CHECK_EQUAL(n+p,n_p);
         BOOST_CHECK_EQUAL(p+n,n_p);
@@ -147,23 +152,23 @@ BOOST_AUTO_TEST_SUITE( ndtime_aritmetic_operations )
 
         BOOST_CHECK_EQUAL(a-b,c);
         BOOST_CHECK_EQUAL(a-(b+c),b-(a-c));
-        BOOST_CHECK_EQUAL(a-(b+c),NDTime());
-        BOOST_CHECK_EQUAL(b-(a-c),NDTime());
+        BOOST_CHECK_EQUAL(a-(b+c),NDTime::zero());
+        BOOST_CHECK_EQUAL(b-(a-c),NDTime::zero());
         BOOST_CHECK_EQUAL((a-b)-c,a-b-c);
         BOOST_CHECK_EQUAL((a-b)-c,a-(b+c));
         BOOST_CHECK_EQUAL(a-(b-c),a-b+c);
         BOOST_CHECK_EQUAL(a-b-c,a-c-b);
         BOOST_CHECK_EQUAL(a-d,e);
         BOOST_CHECK_EQUAL(a,c+b);
-        BOOST_CHECK_EQUAL(f-g,NDTime());
-        BOOST_CHECK_EQUAL(f-f,NDTime());
-        BOOST_CHECK_EQUAL(a-NDTime(),a);
-        BOOST_CHECK_EQUAL(a-h,NDTime("-inf"));
-        BOOST_CHECK_EQUAL(a-i,NDTime("inf"));
-        BOOST_CHECK_EQUAL(i-i,NDTime());
-        BOOST_CHECK_EQUAL(h-h,NDTime());
-        BOOST_CHECK_EQUAL(h-i,NDTime("inf"));
-        BOOST_CHECK_EQUAL(i-h,NDTime("-inf"));
+        BOOST_CHECK_EQUAL(f-g,NDTime::zero());
+        BOOST_CHECK_EQUAL(f-f,NDTime::zero());
+        BOOST_CHECK_EQUAL(a-NDTime::zero(),a);
+        BOOST_CHECK_EQUAL(a-h,NDTime::minus_infinity());
+        BOOST_CHECK_EQUAL(a-i,NDTime::infinity());
+        BOOST_CHECK_EQUAL(i-i,NDTime::zero());
+        BOOST_CHECK_EQUAL(h-h,NDTime::zero());
+        BOOST_CHECK_EQUAL(h-i,NDTime::infinity());
+        BOOST_CHECK_EQUAL(i-h,NDTime::minus_infinity());
         BOOST_CHECK_EQUAL(f-j,k);
         BOOST_CHECK_EQUAL(l-m, NDTime({0,30}));
         BOOST_CHECK_EQUAL(n-o,n_o);
