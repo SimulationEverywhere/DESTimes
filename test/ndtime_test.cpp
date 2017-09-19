@@ -42,10 +42,6 @@ BOOST_AUTO_TEST_SUITE( ndtime_constructors )
         BOOST_CHECK_EQUAL(c,d);
     }
 
-    BOOST_AUTO_TEST_CASE( bad constructors trhow assert ) {
-
-}
-
 BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE( ndtime_aritmetic_operations )
