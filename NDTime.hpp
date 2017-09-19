@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <cstdlib>
 #include <boost/algorithm/string.hpp>
 
 class NDTime {
@@ -57,7 +58,7 @@ private:
   }
 
   void add_seconds(int a) {
-    this->_seconds += a;
+      this->_seconds += a;
 
     while (this->_seconds >= 60) {
       this->add_minutes(1);
@@ -71,7 +72,7 @@ private:
   }
 
   void add_milliseconds(int a) {
-    this->_milliseconds += a;
+      this->_milliseconds += a;
 
     while (this->_milliseconds >= 1000) {
       this->add_seconds(1);
@@ -85,7 +86,7 @@ private:
   }
 
   void add_microseconds(int a) {
-    this->_microseconds += a;
+      this->_microseconds += a;
 
     while (this->_microseconds >= 1000) {
       this->add_milliseconds(1);
@@ -99,7 +100,7 @@ private:
   }
 
   void add_nanoseconds(int a) {
-    this->_nanoseconds += a;
+      this->_nanoseconds += a;
 
     while (this->_nanoseconds >= 1000) {
       this->add_microseconds(1);
@@ -113,7 +114,7 @@ private:
   }
 
   void add_picoseconds(int a) {
-    this->_picoseconds += a;
+      this->_picoseconds += a;
 
     while (this->_picoseconds >= 1000) {
       this->add_nanoseconds(1);
@@ -127,7 +128,7 @@ private:
   }
 
   void add_femtoseconds(int a) {
-    this->_femtoseconds += a;
+      this->_femtoseconds += a;
 
     while (this->_femtoseconds >= 1000) {
       this->add_picoseconds(1);
@@ -154,9 +155,9 @@ public:
   /******************************************/
   /************** CONSTRUCTORS **************/
   /******************************************/
+
+  // TODO: add checkings of the parameters to be in the correct range
   NDTime() { // default constructor
-    this->_inf = false;
-    this->_possitive = false;
 
     this->resetToZero();
   };
@@ -174,113 +175,188 @@ public:
     _femtoseconds = o._femtoseconds;
   };
 
-  NDTime(int o_h) { // basic contructor hh
-    this->_inf = false;
-    this->_possitive = false;
+  NDTime(std::initializer_list<int> a_args) {
     
     this->resetToZero();
-    
-    this->add_hours(o_h);
+    int a = 0;
+    for (auto i: a_args) {
+
+      switch(a) {
+        case 0:
+          this->_hours = abs(i);
+          this->_possitive = (i >= 0);
+          break;
+        case 1:
+          if (this->_hours == 0) assert(abs(i) < 60);
+          else assert(0 <= i && i < 60);
+          this->_minutes = abs(i);
+          this->_possitive = (i >= 0) && this->_possitive;
+          break;
+        case 2:
+          if (this->_minutes == 0) assert(abs(i) < 60);
+          else assert(0 <= i && i < 60);
+          this->_seconds = abs(i);
+          this->_possitive = (i >= 0) && this->_possitive;
+          break;
+        case 3:
+          if (this->_seconds == 0) assert(abs(i) < 1000);
+          else assert(0 <= i && i < 1000);
+          this->_milliseconds = abs(i);
+          this->_possitive = (i >= 0) && this->_possitive;
+          break;
+        case 4:
+          if (this->_milliseconds == 0) assert(abs(i) < 1000);
+          else assert(0 <= i && i < 1000);
+          this->_microseconds = abs(i);
+          this->_possitive = (i >= 0) && this->_possitive;
+          break;
+        case 5:
+          if (this->_microseconds == 0) assert(abs(i) < 1000);
+          else assert(0 <= i && i < 1000);
+          this->_nanoseconds = abs(i);
+          this->_possitive = (i >= 0) && this->_possitive;
+          break;
+        case 6:
+          if (this->_nanoseconds == 0) assert(abs(i) < 1000);
+          else assert(0 <= i && i < 1000);
+          this->_picoseconds = abs(i);
+          this->_possitive = (i >= 0) && this->_possitive;
+          break;
+        case 7:
+          if (this->_picoseconds == 0) assert(abs(i) < 1000);
+          else assert(0 <= i && i < 1000);
+          this->_femtoseconds = abs(i);
+          this->_possitive = (i >= 0) && this->_possitive;
+          break;
+      }
+      a++;
+    }
+  }
+
+  NDTime(int o_h) { // basic contructor hh
+
+    this->resetToZero();
+
+    this->_possitive = o_h >= 0;
+    this->_hours = abs(o_h);
   };
 
   NDTime(int o_h, int o_m) { // basic contructor hh,mm
-    this->_inf = false;
-    this->_possitive = false;
-    
+    assert(o_m >= 0 && o_m < 60);
+
     this->resetToZero();
     
-    this->add_hours(o_h);
-    this->add_minutes(o_m);
+    this->_possitive = o_h >= 0;
+    this->_hours = abs(o_h);
+    this->_minutes = o_m;
   };
 
   NDTime(int o_h, int o_m, int o_s) { // basic contructor hh,mm,ss
-    this->_inf = false;
-    this->_possitive = false;
+    assert(o_m >= 0 && o_m < 60);
+    assert(o_s >= 0 && o_s < 60);
     
     this->resetToZero();
     
-    this->add_hours(o_h);
-    this->add_minutes(o_m);
-    this->add_seconds(o_s);
+    this->_possitive = o_h >= 0;
+    this->_hours = abs(o_h);
+    this->_minutes = o_m;
+    this->_seconds = o_s;
   };
 
   NDTime(int o_h, int o_m, int o_s, int o_ms) { // basic contructor hh,mm,ss,mmss,
-    this->_inf = false;
-    this->_possitive = false;
-    
+    assert(o_m >= 0 && o_m < 60);
+    assert(o_s >= 0 && o_s < 60);
+    assert(o_ms >= 0 && o_ms < 1000);
+
     this->resetToZero();
     
-    this->add_hours(o_h);
-    this->add_minutes(o_m);
-    this->add_seconds(o_s);
-    this->add_milliseconds(o_ms);
+    this->_possitive = o_h >= 0;
+    this->_hours = abs(o_h);
+    this->_minutes = o_m;
+    this->_seconds = o_s;
+    this->_milliseconds = o_ms;
   };
 
   NDTime(int o_h, int o_m, int o_s, int o_ms, int o_mcs) { // advanced constructor hh,mm,ss,mmss,mmccss
-    this->_inf = false;
-    this->_possitive = false;
+    assert(o_m >= 0 && o_m < 60);
+    assert(o_s >= 0 && o_s < 60);
+    assert(o_ms >= 0 && o_ms < 1000);
+    assert(o_mcs >= 0 && o_mcs < 1000);
 
     this->resetToZero();
     
-    this->add_hours(o_h);
-    this->add_minutes(o_m);
-    this->add_seconds(o_s);
-    this->add_milliseconds(o_ms);
-    this->add_microseconds(o_mcs);
+    this->_possitive = o_h >= 0;
+    this->_hours = abs(o_h);
+    this->_minutes = o_m;
+    this->_seconds = o_s;
+    this->_milliseconds = o_ms;
+    this->_microseconds = o_mcs;
   };
 
   NDTime(int o_h, int o_m, int o_s, int o_ms, int o_mcs, int o_ns) { // advanced constructor hh,mm,ss,mmss,mmccss, nnss
-    this->_inf = false;
-    this->_possitive = false;
+    assert(o_m >= 0 && o_m < 60);
+    assert(o_s >= 0 && o_s < 60);
+    assert(o_ms >= 0 && o_ms < 1000);
+    assert(o_mcs >= 0 && o_mcs < 1000);
+    assert(o_ns >= 0 && o_ns < 1000);
 
     this->resetToZero();
     
-    this->add_hours(o_h);
-    this->add_minutes(o_m);
-    this->add_seconds(o_s);
-    this->add_milliseconds(o_ms);
-    this->add_microseconds(o_mcs);
-    this->add_nanoseconds(o_ns);
+    this->_possitive = o_h >= 0;
+    this->_hours = abs(o_h);
+    this->_minutes = o_m;
+    this->_seconds = o_s;
+    this->_milliseconds = o_ms;
+    this->_microseconds = o_mcs;
+    this->_nanoseconds = o_ns;
   };
 
   NDTime(int o_h, int o_m, int o_s, int o_ms, int o_mcs, int o_ns, int o_ps) { // advanced constructor hh,mm,ss,mmccss,nnss,ppss
-    this->_inf = false;
-    this->_possitive = false;
+    assert(o_m >= 0 && o_m < 60);
+    assert(o_s >= 0 && o_s < 60);
+    assert(o_ms >= 0 && o_ms < 1000);
+    assert(o_mcs >= 0 && o_mcs < 1000);
+    assert(o_ns >= 0 && o_ns < 1000);
+    assert(o_ps >= 0 && o_ps < 1000);
 
     this->resetToZero();
     
-    this->add_hours(o_h);
-    this->add_minutes(o_m);
-    this->add_seconds(o_s);
-    this->add_milliseconds(o_ms);
-    this->add_microseconds(o_mcs);
-    this->add_nanoseconds(o_ns);
-    this->add_picoseconds(o_ps);
+    this->_possitive = o_h >= 0;
+    this->_hours = abs(o_h);
+    this->_minutes = o_m;
+    this->_seconds = o_s;
+    this->_milliseconds = o_ms;
+    this->_microseconds = o_mcs;
+    this->_nanoseconds = o_ns;
+    this->_picoseconds = o_ps;
   };
 
   NDTime(int o_h, int o_m, int o_s, int o_ms, int o_mcs, int o_ns, int o_ps, int o_fs) { // advanced constructor hh,mm,ss,mmccss,nnss,ppss,ffss
-    this->_inf = false;
-    this->_possitive = false;
+    assert(o_m >= 0 && o_m < 60);
+    assert(o_s >= 0 && o_s < 60);
+    assert(o_ms >= 0 && o_ms < 1000);
+    assert(o_mcs >= 0 && o_mcs < 1000);
+    assert(o_ns >= 0 && o_ns < 1000);
+    assert(o_ps >= 0 && o_ps < 1000);
+    assert(o_fs >= 0 && o_fs < 1000);
 
     this->resetToZero();
     
-    this->add_hours(o_h);
-    this->add_minutes(o_m);
-    this->add_seconds(o_s);
-    this->add_milliseconds(o_ms);
-    this->add_microseconds(o_mcs);
-    this->add_nanoseconds(o_ns);
-    this->add_picoseconds(o_ps);
-    this->add_femtoseconds(o_fs);
+    this->_possitive = o_h >= 0;
+    this->_hours = abs(o_h);
+    this->_minutes = o_m;
+    this->_seconds = o_s;
+    this->_milliseconds = o_ms;
+    this->_microseconds = o_mcs;
+    this->_nanoseconds = o_ns;
+    this->_picoseconds = o_ps;
+    this->_femtoseconds = o_fs;
   };
 
   // valid options are "inf", "-inf" and hh:mm:ss:mmss:mcs:nnss:ppss:ffss, NOTE: it is not necesary to specify all the units.
   NDTime(const std::string a) { 
     int v, i;
     std::vector<std::string> strs;
-    
-    this->_inf = false;
-    this->_possitive = false;
 
     this->resetToZero();
     
@@ -295,14 +371,17 @@ public:
       for(i=0; i<strs.size(); ++i) {
         v = std::stoi(strs[i]);
         switch(i) {
-          case 0: this->add_hours(v) ; break;
-          case 1: this->add_minutes(v) ; break;
-          case 2: this->add_seconds(v) ; break;
-          case 3: this->add_milliseconds(v) ; break;
-          case 4: this->add_microseconds(v) ; break;
-          case 5: this->add_nanoseconds(v) ; break;
-          case 6: this->add_picoseconds(v) ; break;
-          case 8: this->add_femtoseconds(v) ; break;
+          case 0:
+            this->_possitive = v >= 0;
+            this->_hours = abs(v);
+            break;
+          case 1: assert(v >= 0 && v < 60); this->_minutes = v; break;
+          case 2: assert(v >= 0 && v < 60); this->_seconds = v; break;
+          case 3: assert(v >= 0 && v < 1000); this->_milliseconds = v; break;
+          case 4: assert(v >= 0 && v < 1000); this->_microseconds = v; break;
+          case 5: assert(v >= 0 && v < 1000); this->_nanoseconds = v; break;
+          case 6: assert(v >= 0 && v < 1000); this->_picoseconds = v; break;
+          case 8: assert(v >= 0 && v < 1000); this->_femtoseconds = v; break;
         }
       }
     }
@@ -328,7 +407,7 @@ public:
 
   void resetToZero() {
     this->_inf = false;
-    this->_possitive = false;
+    this->_possitive = true;
     this->_hours = 0;
     this->_minutes = 0;
     this->_seconds = 0;
@@ -340,52 +419,72 @@ public:
   }
 
   NDTime& operator+=(const NDTime& o) noexcept {
-    if (this->_inf && o._inf) {
-      if (this->_possitive != o._possitive) {
+    bool this_positive, o_positive, greater_positive;
+    NDTime greater, lower;
+    NDTime other = o;
+
+    if (this->_inf && other._inf) {
+      if (this->_possitive != other._possitive) {
         this->resetToZero();
-        this->_inf = false;
       }
     
-    } else if (o._inf) {
+    } else if (other._inf) {
+      this->resetToZero();
       this->_inf = true;
-      this->_possitive = o._possitive;
+      this->_possitive = other._possitive;
     
+    } else if (this->_possitive != other._possitive) {
+      
+      this_positive = this->_possitive;
+      o_positive = other._possitive;
+      
+      this->_possitive = other._possitive = true;
+
+      if (*this == other) {
+        this->resetToZero();
+        return *this;
+
+      } else if (*this > other) {
+        greater_positive = this_positive;
+        greater = *this;
+        lower = other;
+      } else {
+        greater_positive = o_positive;
+        greater = other;
+        lower = *this;
+      }
+
+      greater.add_hours(-1 * lower._hours);
+      greater.add_minutes(-1 * lower._minutes);
+      greater.add_seconds(-1 * lower._seconds);
+      greater.add_milliseconds(-1 * lower._milliseconds);
+      greater.add_microseconds(-1 * lower._microseconds);
+      greater.add_nanoseconds(-1 * lower._nanoseconds);
+      greater.add_picoseconds(-1 * lower._picoseconds);
+      greater.add_femtoseconds(-1 * lower._femtoseconds);
+
+      greater._possitive = greater_positive;
+      *this = greater;
     } else {
-      this->add_hours(o._hours);
-      this->add_minutes(o._minutes);
-      this->add_seconds(o._seconds);
-      this->add_milliseconds(o._milliseconds);
-      this->add_microseconds(o._microseconds);
-      this->add_nanoseconds(o._nanoseconds);
-      this->add_picoseconds(o._picoseconds);
-      this->add_femtoseconds(o._femtoseconds);      
+
+      this->add_hours(other._hours);
+      this->add_minutes(other._minutes);
+      this->add_seconds(other._seconds);
+      this->add_milliseconds(other._milliseconds);
+      this->add_microseconds(other._microseconds);
+      this->add_nanoseconds(other._nanoseconds);
+      this->add_picoseconds(other._picoseconds);
+      this->add_femtoseconds(other._femtoseconds);
+
     }
 
     return *this;
   }
 
   NDTime& operator-=(const NDTime& o) noexcept {
-    if (this->_inf && o._inf) {
-      if (this->_possitive == o._possitive) {
-        this->resetToZero();
-        this->_inf = false;
-      }
-    
-    } else if (o._inf) {
-      this->_inf = true;
-      this->_possitive = !o._possitive;
-    
-    } else {
-      this->add_hours(-o._hours);
-      this->add_minutes(-o._minutes);
-      this->add_seconds(-o._seconds);
-      this->add_milliseconds(-o._milliseconds);
-      this->add_microseconds(-o._microseconds);
-      this->add_nanoseconds(-o._nanoseconds);
-      this->add_picoseconds(-o._picoseconds);
-      this->add_femtoseconds(-o._femtoseconds);
-    }
-
+    NDTime minus_o = o;
+    minus_o._possitive = !o._possitive;
+    *this += minus_o;
     return *this;
   }
 
@@ -402,7 +501,8 @@ public:
   }
 
   bool operator==(const NDTime& rhs) const {
-    if (this->_inf && rhs._inf) return this->_possitive == rhs._possitive;
+    if (this->_possitive != rhs._possitive) return false;
+    else if (this->_inf && rhs._inf) return true;
     else if (this->_inf || rhs._inf) return false;
     else {
       bool res = true;
@@ -423,16 +523,17 @@ public:
 
   bool operator<(const NDTime& rhs) const {
     if (*this == rhs) return false;
-    else if (*this == NDTime("inf") || rhs == NDTime("-inf")) return false;
-    else if (rhs == NDTime("inf") ||  *this == NDTime("-inf")) return true;
-    else if (this->_hours != rhs._hours) return this->_hours < rhs._hours;
-    else if (this->_minutes != rhs._minutes) return this->_minutes < rhs._minutes;
-    else if (this->_seconds != rhs._seconds) return this->_seconds < rhs._seconds;
-    else if (this->_milliseconds != rhs._milliseconds) return this->_milliseconds < rhs._milliseconds;
-    else if (this->_microseconds != rhs._microseconds) return this->_microseconds < rhs._microseconds;
-    else if (this->_nanoseconds != rhs._nanoseconds) return this->_nanoseconds < rhs._nanoseconds;
-    else if (this->_femtoseconds != rhs._femtoseconds) return this->_femtoseconds < rhs._femtoseconds;
-    else assert("NDTime operator < get to an invalid option, this could be a bug.");
+    else if (*this == NDTime::infinity() || rhs == NDTime::minus_infinity()) return false;
+    else if (rhs == NDTime::infinity() || *this == NDTime::minus_infinity()) return true;
+    else if (this->_possitive != rhs._possitive) return !this->_possitive;
+    else {
+      NDTime left = *this;
+      NDTime rigth = rhs;
+
+      left -= rigth;
+
+      return !left._possitive;
+    }
   }
 
   bool operator>(const NDTime& rhs) const {
@@ -453,12 +554,9 @@ public:
 
 inline std::ostream& operator<<(std::ostream& os, const NDTime& t) {
 
+  if (!t._possitive) os << "-";
   if (t._inf) {
-    if (t._possitive) {
-      os << "inf";
-    } else {
-      os << "-inf";
-    }
+    os << "inf";
   } else {
     os << ((t._hours < 10) ? "0":"") << t._hours << ":";
     os << ((t._minutes < 10) ? "0":"") << t._minutes << ":";
@@ -488,9 +586,9 @@ namespace std {
   class numeric_limits<NDTime>{
   public:
     static constexpr bool is_specialized = true;
-    static NDTime min() noexcept { return NDTime(numeric_limits<int>::min(),-59,-59,-999,-999,-999,-999,-999); }
-    static NDTime max() noexcept { return NDTime(numeric_limits<int>::max(),59,59,999,999,999,999,999); }
-    static NDTime lowest() noexcept { return NDTime(numeric_limits<int>::min(),-59,-59,-999,-999,-999,-999,-999); }
+    static NDTime min() noexcept { return NDTime({numeric_limits<int>::min(),59,59,999,999,999,999,999}); }
+    static NDTime max() noexcept { return NDTime({numeric_limits<int>::max(),59,59,999,999,999,999,999}); }
+    static NDTime lowest() noexcept { return NDTime({numeric_limits<int>::min(),-59,-59,-999,-999,-999,-999,-999}); }
 
     static constexpr int  digits = numeric_limits<int>::digits;
     static constexpr int  digits10 = numeric_limits<int>::digits10;
