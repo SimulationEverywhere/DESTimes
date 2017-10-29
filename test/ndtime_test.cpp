@@ -267,6 +267,8 @@ BOOST_AUTO_TEST_SUITE( deepView )
         std::string expected2 = "10:05:10:000";
         std::string expected3 = "10:05:00:000";
         std::string expected4 = "10:00:00:000";
+        std::string expected5 = "The current time is: 10:00:00:000";
+        std::string expected6 = "10:00:00:000 is the current time";
 
         std::stringstream out;
         out << a; BOOST_CHECK_EQUAL(out.str(),expected1); out.str(""); out.clear();
