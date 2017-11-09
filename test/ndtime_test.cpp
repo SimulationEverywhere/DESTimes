@@ -16,7 +16,7 @@
  */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
-#include "../NDTime.hpp"
+#include "../include/NDTime.hpp"
 
 
 BOOST_AUTO_TEST_SUITE( ndtime_constructors )
