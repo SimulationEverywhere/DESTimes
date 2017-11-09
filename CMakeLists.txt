@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(DESTimes)
-
-set(CMAKE_CXX_STANDARD 11)
+set (DESTimes_VERSION_MAJOR 1)
+set (DESTimes_VERSION_MINOR 0)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -10,7 +10,9 @@ target_sources(NDTime INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/NDTime.hpp)
 target_include_directories(NDTime INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}})
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-include_directories(include ${Boost_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -std=c++1z")
 
 enable_testing()
 FILE(GLOB TestSources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} test/*_test.cpp)
