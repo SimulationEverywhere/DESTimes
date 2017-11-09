@@ -159,7 +159,7 @@ public:
     NDTime() { // default constructor
 
         this->resetToZero();
-    };
+    }
 
     NDTime(const NDTime& o) { // copy constructor
         _inf = o._inf;
@@ -172,7 +172,7 @@ public:
         _nanoseconds = o._nanoseconds;
         _picoseconds = o._picoseconds;
         _femtoseconds = o._femtoseconds;
-    };
+    }
 
     NDTime(std::initializer_list<int> a_args) { // variable unit amount specification constructor
 
@@ -236,7 +236,8 @@ public:
     // valid options are "inf", "infinity", "-inf" "-infinity" and hh:mm:ss:mmss:mcs:nnss:ppss:ffss
     // NOTE: it is not necessary to specify all the units.
     NDTime(const std::string a) {
-        int v, i;
+        int v;
+        unsigned i;
         std::vector<std::string> strs;
 
         this->resetToZero();
@@ -266,7 +267,7 @@ public:
                 }
             }
         }
-    };
+    }
 
     static void startDeepView() {
         if (!NDTime::deepView(false))
