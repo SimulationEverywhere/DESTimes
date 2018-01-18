@@ -29,21 +29,14 @@ This time units are the smaller mesurable units in phisics
 ```c++
 1 - NDTime();
 2 - NDTime(const NDTime& val);
-3 - NDTime(int hours);
-4 - NDTime(int hours, int minutes);
-5 - NDTime(int hours, int minutes, int seconds);
-6 - NDTime(int hours, int minutes, int seconds, int milliseconds);
-7 - NDTime(int hours, int minutes, int seconds, int milliseconds, int microseconds);
-8 - NDTime(int hours, int minutes, int seconds, int milliseconds, int microseconds, int nanoseconds);
-9 - NDTime(int hours, int minutes, int seconds, int milliseconds, int microseconds, int nanoseconds, int picoseconds);
-10 - NDTime(int hours, int minutes, int seconds, int milliseconds, int microseconds, int nanoseconds, int picoseconds, int femtoseconds);
-11 - NDTime(const string val);
+3 - NDTime(std::initializer_list<int> val);
+4 - NDTime(const string val);
 ```
 
 	1 Default constructor: Initialize a new NDTime with value zero as default.
 	2 Copy constructor: Initialize a new NDTime with the exact same value as the first parameter val.
-	3..10 - Natural constructor: Initialize a new NDTime with values from hours to hours:......:femtoseconds.
-	11 Parser constructor: Intializa a new NDTime parsing a string val. accepted strings are: {"inf","-inf","hh" to "hh:mm:ss:mmss:mcs:nnss:ppss:ffss"} the last format is the international standar time format extended until femtoseconds.
+	3 Natural constructor: Initialize a new NDTime with values from {hours} to {hours, ..., femtoseconds}.
+	11 Parser constructor: Intializa a new NDTime parsing a string val. accepted strings are: {"inf","-inf",["hh", ..., "hh:mm:ss:mmss:mcs:nnss:ppss:ffss"]} the last format is the international standar time format extended until femtoseconds.
 
 ## Available operators
 
@@ -78,13 +71,13 @@ static void startDeepView();
 // When deep view mode is enabled calling NDTime::startDeepView() the << operator start printing all the units from hours to femtoseconds.
 
 // line:
-std::cout << NDTime(1,1,1,1,1,1,1,1) << std::endl;
+std::cout << NDTime({1,1,1,1,1,1,1,1}) << std::endl;
 NDTime::startDeepView();
-std::cout << NDTime(1,1,1,1,1,1,1,1) << std::endl;
+std::cout << NDTime({1,1,1,1,1,1,1,1}) << std::endl;
 
 // output:
-1:1:1:1
-1:1:1:1:1:1:1:1
+01:01:01:001
+01:01:01:001:001:001:001:001
 ```
 
 ```c++
@@ -94,13 +87,13 @@ Stops deep view mode calling NDTime::stopDeepView()
 
 // line:
 NDTime::startDeepView();
-std::cout << NDTime(1,1,1,1,1,1,1,1) << std::endl;
+std::cout << NDTime({1,1,1,1,1,1,1,1}) << std::endl;
 NDTime::stopDeepView();
-std::cout << NDTime(1,1,1,1,1,1,1,1) << std::endl;
+std::cout << NDTime({1,1,1,1,1,1,1,1}) << std::endl;
 
 // output:
-1:1:1:1:1:1:1:1
-1:1:1:1
+01:01:01:001:001:001:001:001
+01:01:01:001
 ```
 
 ```c++
