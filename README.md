@@ -12,7 +12,7 @@ Laouen Mayal Louan Belloli
  - [gcc]
  - [Boost 1.57] >=
 
-### BRIValue (Boost Rational with Infinity Value): 
+### EIRational (Extended Infinity Rational): 
 Is an extension of boost_rational\<int\> that allows using infinity.
 
 ### NDTime (Natural Deep Time):
