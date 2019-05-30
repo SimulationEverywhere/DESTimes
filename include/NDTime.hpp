@@ -482,29 +482,37 @@ public:
         return !(*this < rhs);
     }
 
-    //Return a long of time in microseconds
-    long getMicroSeconds() const{
+  	int getHours() const {
+  		return this->_hours;
+  	}
 
-      if (this->_inf) {
-        return LONG_MAX;
+  	int getMinutes() const {
+  		return this->_minutes;
+  	}
 
-      } else if (!this->_possitive) {
-        return 0;
+  	int getSeconds() const {
+  		return this->_seconds;
+  	}
 
-      } else {
+  	int getMilliseconds() const {
+  		return this->_milliseconds;
+  	}
 
-        //Ignore Anything below 1 microsecond (Round down always)
-        return this->_microseconds +
-             1000 * (this->_milliseconds +
-                     1000 * (this->_seconds  +
-                             60 * (this->_minutes +
-                                   60 * this->_hours
-                                  )
-                            )
-                    );
-      }
+  	int getMicroseconds() const {
+  		return this->_microseconds;
+  	}
 
-    }
+  	int getNanoseconds() const {
+  		return this->_nanoseconds;
+  	}
+
+  	int getPicoseconds() const {
+  		return this->_picoseconds;
+  	}
+
+  	int getFemtoseconds() const {
+  		return _femtoseconds;
+  	}
 
     friend std::ostream& operator<<(std::ostream& os, const NDTime& t);
     friend std::istream& operator>>(std::istream& is, NDTime& t);
