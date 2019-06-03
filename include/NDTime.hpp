@@ -1,17 +1,17 @@
 /**
  * NDTime (Natural Deep Time) class for Discrete Event Simulation purposes
  * Copyright (C) 2016  Laouen Mayal Louan Belloli
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -481,6 +481,38 @@ public:
     bool operator>=(const NDTime& rhs) const {
         return !(*this < rhs);
     }
+
+  	int getHours() const {
+  		return this->_hours;
+  	}
+
+  	int getMinutes() const {
+  		return this->_minutes;
+  	}
+
+  	int getSeconds() const {
+  		return this->_seconds;
+  	}
+
+  	int getMilliseconds() const {
+  		return this->_milliseconds;
+  	}
+
+  	int getMicroseconds() const {
+  		return this->_microseconds;
+  	}
+
+  	int getNanoseconds() const {
+  		return this->_nanoseconds;
+  	}
+
+  	int getPicoseconds() const {
+  		return this->_picoseconds;
+  	}
+
+  	int getFemtoseconds() const {
+  		return _femtoseconds;
+  	}
 
     friend std::ostream& operator<<(std::ostream& os, const NDTime& t);
     friend std::istream& operator>>(std::istream& is, NDTime& t);
