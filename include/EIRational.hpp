@@ -125,6 +125,12 @@ class EIRational {
       
       return to_string(_value.numerator()) + "/" + to_string(_value.denominator());  
     }
+
+    // a useful general-purpose accessor
+    auto as_tuple() const {
+        return std::make_tuple(_inf, _possitive, _value);
+    }
+
 };
 
 inline EIRational operator+(const EIRational lhs, const EIRational& rhs) noexcept {
@@ -241,5 +247,14 @@ namespace std {
     static constexpr bool tinyness_before = false;
   };
 }
+
+// hash_value implemented in terms of tuple, for consistency and simplicity
+std::size_t hash_value(const EIRational& t) {
+    return boost::hash_value(t.as_tuple());
+}
+
+// specialize hash
+template<>
+struct std::hash<EIRational> : boost::hash<EIRational> {};
 
 #endif // EIRATIONAL_HPP

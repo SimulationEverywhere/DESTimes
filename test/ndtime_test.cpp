@@ -16,6 +16,7 @@
  */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
+#include <unordered_map>
 #include "../include/NDTime.hpp"
 
 
@@ -381,6 +382,33 @@ BOOST_AUTO_TEST_SUITE( deepView )
         out << h; BOOST_CHECK_EQUAL(out.str(),dv_expected_h); out.str(""); out.clear();
         NDTime::stopDeepView();
         out << h; BOOST_CHECK_EQUAL(out.str(),sv_expected_h); out.str(""); out.clear();
+    }
+
+    BOOST_AUTO_TEST_CASE( unordered_map ) {
+        std::stringstream out;
+        auto m = std::unordered_map<NDTime, std::string>();
+
+        NDTime a({10,5,10,105,10,105,10,10});
+        NDTime b({10,5,10,105,10,105,10});
+        NDTime c({10,5,10,105,10,105});
+
+        std::string a_first = "Hello";
+        std::string b_first = "World";
+        std::string c_first = "!";
+        std::string a_last = "Goodbye";
+
+        m[a] = a_first;
+        m[b] = b_first;
+
+        out << m.at(a); BOOST_CHECK_EQUAL(out.str(),a_first); out.str(""); out.clear();
+        out << m.at(b); BOOST_CHECK_EQUAL(out.str(),b_first); out.str(""); out.clear();
+        BOOST_CHECK_THROW(m.at(c), std::out_of_range);
+        m[a] = a_last;
+        auto res = m.erase(b); BOOST_CHECK_EQUAL(1, res);
+        m[c] = c_first;
+        out << m.at(a); BOOST_CHECK_EQUAL(out.str(),a_last); out.str(""); out.clear();
+        BOOST_CHECK_THROW(m.at(b), std::out_of_range);
+        out << m.at(c); BOOST_CHECK_EQUAL(out.str(),c_first); out.str(""); out.clear();
     }
 
 BOOST_AUTO_TEST_SUITE_END()
