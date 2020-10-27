@@ -21,10 +21,13 @@
 
 #include <iostream>
 #include <string>
+#include <tuple>
 #include <vector>
 #include <cmath>
 #include <cstdlib>
 #include <boost/algorithm/string.hpp>
+#include <boost/functional/hash.hpp>
+
 
 class NDTime {
 private:
@@ -514,6 +517,12 @@ public:
   		return _femtoseconds;
   	}
 
+    // a useful general-purpose accessor
+  	auto as_tuple() const {
+        return std::make_tuple(_inf, _possitive, _hours, _minutes, _seconds, _milliseconds,
+                               _microseconds, _nanoseconds, _picoseconds, _femtoseconds);
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const NDTime& t);
     friend std::istream& operator>>(std::istream& is, NDTime& t);
 };
@@ -558,6 +567,7 @@ namespace std {
 
         static constexpr int  digits = numeric_limits<int>::digits;
         static constexpr int  digits10 = numeric_limits<int>::digits10;
+        static constexpr int  max_digits10 = numeric_limits<int>::max_digits10;
         static constexpr bool is_signed = true;
         static constexpr bool is_integer = false;
         static constexpr bool is_exact = true;
@@ -583,5 +593,14 @@ namespace std {
         static constexpr bool tinyness_before = false;
     };
 }
+
+// hash_value implemented in terms of tuple, for consistency and simplicity
+std::size_t hash_value(const NDTime& t) {
+    return boost::hash_value(t.as_tuple());
+}
+
+// specialize hash
+template<>
+struct std::hash<NDTime> : boost::hash<NDTime> {};
 
 #endif
